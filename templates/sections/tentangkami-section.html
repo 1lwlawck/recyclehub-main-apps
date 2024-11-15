@@ -1,0 +1,94 @@
+<!-- Section with background image -->
+<section
+  class="bg-cover bg-center text-gray-800 w-full h-full py-8 flex justify-center items-center flex-col"
+  style="
+    background-image: url('/static/images/bg-pict.jpg');
+    background-size: cover;
+    background-position: center;
+  "
+>
+  <div
+    data-aos="fade-up"
+    data-aos-offset="200"
+    data-aos-delay="50"
+    data-aos-duration="800"
+    class="text-center w-full px-4"
+  >
+    <!-- Teks di Atas Gambar dengan ID untuk efek typing -->
+    <h1
+      id="typing-text"
+      class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 font-inconsolata"
+    >
+      <!-- Teks akan diisi dengan efek typing melalui JavaScript -->
+    </h1>
+    <div
+      class="inline-block bg-white px-6 py-3 sm:px-4 sm:py-2 rounded-md mt-4"
+    >
+      <span
+        class="text-black font-semibold text-lg sm:text-xl md:text-2xl font-inconsolata"
+      >
+        #ubahsampahjadinilai
+      </span>
+    </div>
+    <div>
+      <a href="#misiKami">
+        <button
+          type="button"
+          class="text-white bg-[#003161] hover:bg-[#005d88] focus:ring-4 focus:outline-none focus:ring-[#003161] font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-[#003161] dark:hover:bg-[#005d88] dark:focus:ring-[#003161] mt-6"
+        >
+          <svg
+            class="w-4 h-4"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 14 10"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M1 5h12m0 0L9 1m4 4L9 9"
+            />
+          </svg>
+          <span class="sr-only">Icon description</span>
+        </button>
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  function typeText(elementId, text, speed) {
+    let i = 0;
+    const element = document.getElementById(elementId);
+
+    console.log("Starting typing effect on:", elementId);
+    console.log("Text to type:", text);
+
+    function typeWriter() {
+      if (i < text.length) {
+        element.innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typeWriter, speed);
+      } else {
+        console.log("Typing effect completed.");
+      }
+    }
+
+    if (element) {
+      typeWriter();
+    } else {
+      console.log("Element not found:", elementId);
+    }
+  }
+
+  // Text to be typed for the heading
+  const typingText = "Dari Langkah Kecil Untuk Perubahan Besar Bagi Lingkungan";
+
+  // Apply typing effect on window load
+  window.addEventListener("load", function () {
+    console.log("Page loaded. Initiating typing effect.");
+    typeText("typing-text", typingText, 50); // Adjust speed as needed
+  });
+</script>

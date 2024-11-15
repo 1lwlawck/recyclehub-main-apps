@@ -1,0 +1,122 @@
+<nav
+  class="bg-[#006A67] dark:bg-[#004f4f] fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-[95%] max-w-7xl rounded-lg shadow-lg font-inconsolata"
+>
+  <div class="flex items-center justify-between p-4">
+    <!-- Logo -->
+    <div class="flex items-center">
+      <img
+        class="h-8 w-auto"
+        src="/static/images/logos_app.png"
+        alt="Recycle HUB"
+      />
+      <span class="ml-2 text-xl font-semibold text-white">Recycle HUB</span>
+    </div>
+
+    <!-- Menu Links (centered on larger screens) -->
+    <div class="hidden md:flex md:space-x-4">
+      <a
+        href="{{ url_for('home') }}"
+        class="text-white hover:bg-[#004f4f] px-3 py-2 rounded-md font-semibold text-sm {% if request.endpoint == 'home' %} bg-[#008080] bg-opacity-30 text-white {% endif %}"
+      >
+        Beranda
+      </a>
+      <a
+        href="{{ url_for('about') }}"
+        class="text-white hover:bg-[#004f4f] px-3 py-2 rounded-md text-sm font-semibold {% if request.endpoint == 'about' %} bg-[#008080] bg-opacity-30 text-white {% endif %}"
+      >
+        Tentang Kami
+      </a>
+      <a
+        href="#"
+        class="text-white hover:bg-[#004f4f] px-3 py-2 rounded-md text-sm font-semibold"
+      >
+        Artikel
+      </a>
+      <a
+        href="{{ url_for('contact') }}"
+        class="text-white hover:bg-[#004f4f] px-3 py-2 rounded-md text-sm font-semibold {% if request.endpoint == 'contact' %} bg-[#008080] bg-opacity-30 text-white {% endif %}"
+      >
+        Kontak Kami
+      </a>
+    </div>
+
+    <!-- Button (only visible on larger screens) -->
+    <div class="hidden md:flex">
+      <a
+        href="{{ url_for('login') }}"
+        class="text-white bg-[#004f4f] hover:bg-[#003838] px-4 py-2 rounded-lg text-sm font-semibold"
+      >
+        Masuk
+      </a>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <div class="md:hidden">
+      <button
+        id="mobile-menu-button"
+        class="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-[#004f4f] focus:outline-none"
+      >
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16m-7 6h7"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu (toggle visibility with JavaScript) -->
+  <div
+    id="mobile-menu"
+    class="md:hidden flex flex-col space-y-2 p-4 bg-[#006A67] dark:bg-[#004f4f] rounded-lg shadow-lg hidden"
+  >
+    <a
+      href="{{ url_for('home') }}"
+      class="text-white hover:bg-[#004f4f] px-3 py-2 rounded-md text-sm font-semibold {% if request.endpoint == 'home' %} bg-[#008080] bg-opacity-30 text-white {% endif %}"
+    >
+      Beranda
+    </a>
+    <a
+      href="{{ url_for('about') }}"
+      class="text-white hover:bg-[#004f4f] px-3 py-2 rounded-md text-sm font-semibold {% if request.endpoint == 'about' %} bg-[#008080] bg-opacity-30 text-white {% endif %}"
+    >
+      Tentang Kami
+    </a>
+    <a
+      href="#"
+      class="text-white hover:bg-[#004f4f] px-3 py-2 rounded-md text-sm font-semibold"
+    >
+      Artikel
+    </a>
+    <a
+      href="{{ url_for('contact') }}"
+      class="text-white hover:bg-[#004f4f] px-3 py-2 rounded-md text-sm font-semibold {% if request.endpoint == 'contact' %} bg-[#008080] bg-opacity-30 text-white {% endif %}"
+    >
+      Kontak Kami
+    </a>
+    <a
+      href="{{ url_for('login') }}"
+      class="text-white hover:bg-[#004f4f] px-3 py-2 rounded-md text-sm font-semibold"
+    >
+      Login
+    </a>
+  </div>
+</nav>
+
+<script>
+  // Toggle mobile menu open/close
+  document
+    .getElementById("mobile-menu-button")
+    .addEventListener("click", function () {
+      var mobileMenu = document.getElementById("mobile-menu");
+      mobileMenu.classList.toggle("hidden");
+    });
+</script>

@@ -1,0 +1,120 @@
+<div class="bg-white flex items-center justify-center min-h-screen">
+  <div class="flex bg-white shadow-lg rounded-lg overflow-hidden max-w-4xl">
+    <!-- Left side with illustration -->
+    <div
+      class="hidden md:flex md:w-1/2 bg-gray-50 items-center justify-center"
+    >
+      <img
+        src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/authentication/illustration.svg"
+        alt="Register Illustration"
+        class="w-3/4 h-auto"
+      />
+    </div>
+
+    <!-- Right side with form -->
+    <div class="w-full md:w-1/2 p-8 md:p-10 lg:p-16">
+      <div class="flex items-center mb-6">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-8 w-8 text-blue-600 mr-2"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M12 2C6.486 2 2 6.486 2 12c0 5.514 4.486 10 10 10s10-4.486 10-10c0-5.514-4.486-10-10-10zm-1 15v-4h2v4h-2zm0-6V7h2v4h-2z"
+          />
+        </svg>
+        <h2 class="text-3xl font-bold text-gray-800">Buat Akun</h2>
+      </div>
+      <p class="text-gray-600 mb-8">
+        Mulai daftar kemitraan anda segera. Sudah punya akun?
+        <a
+          href="{{ url_for('login') }}"
+          class="text-green-600 hover:underline"
+          >Masuk.</a
+        >
+      </p>
+
+      <form action="#" method="POST" class="space-y-4">
+        <!-- Full Name -->
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700"
+            >Nama Bank Sampah
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Bank sampah melati etc."
+            required
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-green-500 focus:border-green-500"
+          />
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700"
+            >Email</label
+          >
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="banksampah@gmail.com"
+            required
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-green-500 focus:border-green-500"
+          />
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label
+            for="password"
+            class="block text-sm font-medium text-gray-700"
+            >Password</label
+          >
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="••••••••"
+            required
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-green-500 focus:border-green-500"
+          />
+        </div>
+
+        <!-- Confirm Password -->
+        <div>
+          <label
+            for="confirm-password"
+            class="block text-sm font-medium text-gray-700"
+            >Confirm Password</label
+          >
+          <input
+            type="password"
+            id="confirm-password"
+            name="confirm-password"
+            placeholder="••••••••"
+            required
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-green-500 focus:border-green-500"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="w-full py-2 px-4 bg-green-700 hover:bg-green-800 text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+        >
+          Buat akun kamu
+        </button>
+
+        <div class="flex items-center justify-center space-x-4 my-4">
+          <span class="text-gray-400">or</span>
+        </div>
+
+        <div class="flex items-center justify-center space-x-4">
+          <!-- Google Button -->
+          {% include 'components/btn-google.html' %}
+        </div>
+      </form>
+    </div>
+  </div>
+</body>

@@ -1,0 +1,91 @@
+<div class="bg-white flex items-center justify-center min-h-screen">
+  <div
+    class="flex flex-col md:flex-row bg-white shadow-none md:shadow-lg rounded-lg overflow-hidden max-w-lg md:max-w-4xl w-full"
+  >
+    <!-- Left side with image, hidden on small screens -->
+    <div
+      class="hidden md:flex md:w-1/2 bg-gray-50 items-center justify-center p-4"
+    >
+      <img
+        src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/authentication/illustration.svg"
+        alt="Login Illustration"
+        class="w-3/4 h-auto"
+      />
+    </div>
+
+    <!-- Right side with form -->
+    <div class="w-full md:w-1/2 p-6 sm:p-8 md:p-10 lg:p-16">
+      <div class="flex items-center mb-4">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-800">
+          Selamat Datang
+        </h2>
+      </div>
+      <p class="text-gray-600 mb-6 text-sm md:text-base">
+        Mulai akses admin dashboard Anda segera. Belum punya akun mitra?
+        <a
+          href="{{ url_for('register') }}"
+          class="text-green-600 hover:underline"
+          >Daftar Kemitraan Sekarang</a
+        >
+      </p>
+
+      <form action="#" method="POST" class="space-y-4">
+        <div class="space-y-4">
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700"
+              >Email</label
+            >
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="banksampah@gmail.com"
+              required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-green-500 focus:border-green-500"
+            />
+          </div>
+          <div>
+            <label
+              for="password"
+              class="block text-sm font-medium text-gray-700"
+              >Kata Sandi</label
+            >
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="••••••••"
+              required
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-green-500 focus:border-green-500"
+            />
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between text-sm">
+          <label class="flex items-center text-gray-600">
+            <input type="checkbox" class="mr-2 leading-tight" /> Ingat Saya
+          </label>
+          <a href="#" class="text-green-600 hover:underline"
+            >Lupa Kata Sandi?</a
+          >
+        </div>
+
+        <button
+          type="submit"
+          class="w-full py-2 px-4 bg-green-700 hover:bg-green-800 text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+        >
+          Masuk ke akun kamu
+        </button>
+
+        <div class="flex items-center justify-center space-x-4 my-4">
+          <span class="text-gray-400">Atau</span>
+        </div>
+
+        <!-- Google Button -->
+        <div class="flex items-center justify-center">
+          {% include 'components/btn-google.html' %}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
