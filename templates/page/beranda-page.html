@@ -1,0 +1,15 @@
+<!-- templates/index.html -->
+
+{% extends 'base.html' %} {% block title %} Beranda {% endblock %} {% block
+content %}
+<!-- Section Beranda -->
+{% include 'sections/beranda-section.html' %}
+
+<!-- Section Manfaat -->
+{% include 'sections/manfaat-section.html' %}
+
+<!-- Section Fitur -->
+{% include 'sections/fitur-section.html' %}
+
+<!-- Section Artikel -->
+{% include 'sections/artikel-section-card.html' %} {% endblock %}

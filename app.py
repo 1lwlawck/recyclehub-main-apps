@@ -10,15 +10,23 @@ app.secret_key = "key"
 # Halaman Awal 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('page/beranda-page.html')
 
 @app.route('/about')
 def about():
-    return render_template('tentangkami.html')
+    return render_template('page/tentangkami-page.html')
+
+@app.route('/articles')
+def articles():
+    return render_template('page/artikel-page.html')
+
+@app.route('/content')
+def content():
+    return render_template('sections/artikel-content.html')
 
 @app.route('/contact')
 def contact():  
-    return render_template('kontakKami.html')
+    return render_template('page/kontakKami-page.html')
 
 
 

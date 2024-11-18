@@ -1,66 +1,139 @@
-<section class="bg-gray-100 w-full pb-12 px-4">
-  <div
-    class="container mx-auto px-4 py-12 mt-5"
-    data-aos="fade-up"
-    <!--
-    Apply
-    AOS
-    to
-    the
-    section
-    wrapper
-    --
-  >
-    <h2 class="text-3xl font-bold text-center mt-5 mb-8">Artikel Terbaru</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Article Card 1 -->
-      <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-        <img
-          alt="A pile of various types of waste including plastic bottles and containers"
-          class="w-full h-48 object-cover"
-          src="https://storage.googleapis.com/a1aa/image/GWeIfsacpxjoMEYfoGFyKf7AU7fq8Y3xM9cQfbjbDwGhzgf3JA.jpg"
-        />
-        <div class="p-4">
-          <h2 class="text-base sm:text-lg font-semibold mb-2">
-            Tips Sederhana Gaya Hidup Ramah Lingkungan Mengurangi Sampah
-          </h2>
-          <a class="text-green-500 font-semibold" href="#"
-            >Selengkapnya <i class="fas fa-arrow-right"></i
-          ></a>
+<!-- templates/artikel.html -->
+<section class="bg-white text-gray-800 font-inconsolata mt-20">
+  <!-- Menambahkan mt-20 atau lebih untuk memberi ruang atas -->
+  <div class="container mx-auto px-4 py-8">
+    <div class="text-center mb-8">
+      <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">
+        Artikel Inovasi dalam Pengelolaan Sampah
+      </h1>
+      <p class="text-gray-600 mt-2">
+        Menyelamatkan bumi dengan inovasi baru dalam pengelolaan sampah plastik.
+      </p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-2">
+        <!-- Artikel Pertama -->
+        <div class="mb-8">
+          <div class="flex flex-col sm:flex-row">
+            <img
+              alt="Inovasi Pengelolaan Sampah Plastik"
+              class="w-full sm:w-1/3 object-cover mb-4 sm:mb-0"
+              height="400"
+              src="{{ url_for('static', filename='images/artikel1.jpg') }}"
+              width="600"
+            />
+            <div class="w-full sm:w-2/3 bg-green-50 p-4">
+              <h3 class="text-blue-600 text-sm font-semibold">
+                Inovasi Pengelolaan Sampah Plastik
+              </h3>
+              <h2 class="text-xl font-bold text-gray-900 mt-2">
+                Teknologi Baru dalam Daur Ulang Plastik
+              </h2>
+              <p class="text-gray-600 mt-2">
+                Teknologi terbaru dalam pengelolaan sampah plastik memberikan
+                solusi lebih efisien untuk mendaur ulang plastik dan mengurangi
+                limbah.
+              </p>
+              <a class="text-blue-600 mt-4 inline-block" href="#">
+                Read More
+                <i class="fas fa-arrow-right"> </i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- Artikel Kedua -->
+        <div class="mb-8">
+          <div class="flex flex-col sm:flex-row">
+            <img
+              alt="Pengelolaan Sampah Plastik di Rumah"
+              class="w-full sm:w-1/3 object-cover mb-4 sm:mb-0"
+              height="400"
+              src="{{ url_for('static', filename='images/artikel1.jpg') }}"
+              width="600"
+            />
+            <div class="w-full sm:w-2/3 bg-green-50 p-4">
+              <h3 class="text-blue-600 text-sm font-semibold">
+                Pengelolaan Sampah Plastik di Rumah
+              </h3>
+              <h2 class="text-xl font-bold text-gray-900 mt-2">
+                Cara Menyortir Sampah Plastik di Rumah
+              </h2>
+              <p class="text-gray-600 mt-2">
+                Mengelola sampah plastik dimulai dari rumah. Simak cara mudah
+                menyortir dan mendaur ulang plastik untuk menjaga kebersihan
+                lingkungan.
+              </p>
+              <a class="text-blue-600 mt-4 inline-block" href="#">
+                Read More
+                <i class="fas fa-arrow-right"> </i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- Artikel Ketiga -->
+        <div class="mb-8">
+          <div class="flex flex-col sm:flex-row">
+            <img
+              alt="Sampah Plastik di Laut"
+              class="w-full sm:w-1/3 object-cover mb-4 sm:mb-0"
+              height="400"
+              src="{{ url_for('static', filename='images/artikel1.jpg') }}"
+              width="600"
+            />
+            <div class="w-full sm:w-2/3 bg-green-50 p-4">
+              <h3 class="text-blue-600 text-sm font-semibold">
+                Dampak Sampah Plastik di Laut
+              </h3>
+              <h2 class="text-xl font-bold text-gray-900 mt-2">
+                Menanggulangi Sampah Plastik di Laut
+              </h2>
+              <p class="text-gray-600 mt-2">
+                Sampah plastik di laut menjadi ancaman serius bagi ekosistem
+                laut. Pelajari cara-cara untuk mengurangi sampah plastik yang
+                mencemari lautan.
+              </p>
+              <a class="text-blue-600 mt-4 inline-block" href="#">
+                Read More
+                <i class="fas fa-arrow-right"> </i>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Article Card 2 -->
-      <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-        <img
-          alt="A large landfill with people working on it"
-          class="w-full h-48 object-cover"
-          src="https://storage.googleapis.com/a1aa/image/r3DYnI46f0wadKvFrJoiXQnkipl8we0AaUgAVYl9vGcQDefOB.jpg"
-        />
-        <div class="p-4">
-          <h2 class="text-base sm:text-lg font-semibold mb-2">
-            Daur Ulang: Mengapa Penting dan Bagaimana Kita Bisa Berkontribusi?
+      <!-- Sidebar Artikel -->
+      <div class="bg-[#006A67] text-white p-6">
+        <div class="mb-8">
+          <h3 class="text-sm font-semibold">Dampak Sampah Plastik</h3>
+          <h2 class="text-xl font-bold mt-2">
+            Dampak Plastik Terhadap Lingkungan Laut
           </h2>
-          <a class="text-green-500 font-semibold" href="#"
-            >Selengkapnya <i class="fas fa-arrow-right"></i
-          ></a>
+          <p class="mt-2">
+            Plastik yang dibuang ke laut menyebabkan kerusakan ekosistem laut.
+            Pelajari lebih lanjut dampaknya terhadap kehidupan laut dan solusi
+            yang ada.
+          </p>
+          <a class="text-white mt-4 inline-block" href="#">
+            Read More
+            <i class="fas fa-arrow-right"> </i>
+          </a>
         </div>
-      </div>
-
-      <!-- Article Card 3 -->
-      <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-        <img
-          alt="A beach polluted with various types of waste"
-          class="w-full h-48 object-cover"
-          src="https://storage.googleapis.com/a1aa/image/x1OEVfKFba0VGy6oF8y6G5XecNsaYvFpfXNv3o2PRiAlG8fOB.jpg"
-        />
-        <div class="p-4">
-          <h2 class="text-base sm:text-lg font-semibold mb-2">
-            Dampak Sampah pada Ekosistem Laut dan Langkah Mengatasinya
+        <div>
+          <h3 class="text-sm font-semibold">
+            Solusi Pengelolaan Sampah Plastik
+          </h3>
+          <h2 class="text-xl font-bold mt-2">
+            Inovasi dalam Pengolahan Sampah Plastik
           </h2>
-          <a class="text-green-500 font-semibold" href="#"
-            >Selengkapnya <i class="fas fa-arrow-right"></i
-          ></a>
+          <p class="mt-2">
+            Berbagai inovasi terus berkembang dalam pengolahan sampah plastik.
+            Dari teknologi daur ulang hingga solusi berbasis bahan ramah
+            lingkungan.
+          </p>
+          <a class="text-white mt-4 inline-block" href="#">
+            Read More
+            <i class="fas fa-arrow-right"> </i>
+          </a>
         </div>
       </div>
     </div>

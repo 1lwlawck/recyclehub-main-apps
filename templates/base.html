@@ -1,3 +1,4 @@
+<!-- templates/base.html -->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -14,7 +15,6 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <!-- CDN Link -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
@@ -23,13 +23,27 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
     />
-
-    <title>Kontak Kami</title>
+    <title>{% block title %}Default Title{% endblock %}</title>
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+    </style>
   </head>
-  <body>
-    {% include "components/nav-home.html" %} {% include
-    "sections/kontakKami-section.html" %} {% include "components/footer.html" %}
+  <body class="font-inconsolata">
+    <!-- Navbar -->
+    {% include "components/nav-home.html" %}
 
+    <!-- Konten Halaman Dinamis -->
+    <main>{% block content %} {% endblock %}</main>
+
+    <!-- Footer -->
+    {% include "components/footer.html" %}
+
+    <!-- Chatbot -->
+    {% include "components/chatbot-boxes.html" %}
+
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
