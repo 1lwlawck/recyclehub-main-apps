@@ -1,70 +1,25 @@
-from flask import Flask, render_template, redirect, url_for, session
-from livereload import Server
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
+from flask_migrate import Migrate
 
 app = Flask(__name__)
-app.debug = True
-app.config['TEMPLATES_AUTO_RELOAD'] = True
-app.secret_key = "key"
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/recycle_hub'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = 'secret_key' 
 
+db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
+migrate = Migrate(app, db)
 
-# Halaman Awal 
-@app.route('/')
-def home():
-    return render_template('page/beranda-page.html')
+# Register blueprint
+from controllers.auth_controller import auth_blueprint
+from controllers.admin_controller import admin_blueprint
+from controllers.public_controller import public_blueprint
 
-@app.route('/about')
-def about():
-    return render_template('page/tentangkami-page.html')
+app.register_blueprint(public_blueprint)
+app.register_blueprint(admin_blueprint)
+app.register_blueprint(auth_blueprint)
 
-@app.route('/articles')
-def articles():
-    return render_template('page/artikel-page.html')
-
-@app.route('/content')
-def content():
-    return render_template('sections/artikel-content.html')
-
-@app.route('/contact')
-def contact():  
-    return render_template('page/kontakKami-page.html')
-
-
-
-# Halaman Admin 
-
-@app.route('/admin/dashboard')
-def admin_dashboard():
-    return render_template('admin/dashboard-admin.html')
-
-@app.route('/admin/dropoff')
-def admin_dropoff():
-    return render_template('admin/dropoff-admin.html')
-
-@app.route('/admin/riwayat')
-def admin_riwayat():
-    return render_template('admin/riwayat-admin.html')
-
-@app.route('/admin/message')
-def admin_message():
-    return render_template('admin/message-admin.html')
-
-# Route Logout
-@app.route('/logout', methods=['POST'])
-def logout():
-    session.clear()
-    return redirect(url_for('home'))
-
-
-
-# Route untuk auth
-@app.route('/login')
-def login():
-    return render_template('page/login-page.html')
-
-@app.route('/register')
-def register():
-    return render_template('page/register-page.html')
-
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)

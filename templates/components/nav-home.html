@@ -15,25 +15,25 @@
     <!-- Menu Links (centered on larger screens) -->
     <div class="hidden md:flex md:space-x-4">
       <a
-        href="{{ url_for('home') }}"
+        href="{{ url_for('public.home') }}"
         class="text-white hover:bg-[#004f4f] px-3 py-2 rounded-md font-semibold text-sm {% if request.endpoint == 'home' %} bg-[#008080] bg-opacity-30 text-white {% endif %}"
       >
         Beranda
       </a>
       <a
-        href="{{ url_for('about') }}"
+        href="{{ url_for('public.about') }}"
         class="text-white hover:bg-[#004f4f] px-3 py-2 rounded-md text-sm font-semibold {% if request.endpoint == 'about' %} bg-[#008080] bg-opacity-30 text-white {% endif %}"
       >
         Tentang Kami
       </a>
       <a
-        href="{{ url_for('articles') }}"
+        href="{{ url_for('public.articles') }}"
         class="text-white hover:bg-[#004f4f] px-3 py-2 rounded-md text-sm font-semibold"
       >
         Artikel
       </a>
       <a
-        href="{{ url_for('contact') }}"
+        href="{{ url_for('public.contact') }}"
         class="text-white hover:bg-[#004f4f] px-3 py-2 rounded-md text-sm font-semibold {% if request.endpoint == 'contact' %} bg-[#008080] bg-opacity-30 text-white {% endif %}"
       >
         Kontak Kami
@@ -43,7 +43,7 @@
     <!-- Button (only visible on larger screens) -->
     <div class="hidden md:flex">
       <a
-        href="{{ url_for('login') }}"
+        href="{{ url_for('auth.login') }}"
         class="text-white bg-[#004f4f] hover:bg-[#003838] px-4 py-2 rounded-lg text-sm font-semibold"
       >
         Masuk
@@ -76,16 +76,16 @@
   <!-- Mobile menu (toggle visibility with JavaScript) -->
   <div
     id="mobile-menu"
-    class="md:hidden flex flex-col space-y-2 p-4 bg-[#006A67] dark:bg-[#004f4f] rounded-lg shadow-lg hidden"
+    class="md:hidden flex-col space-y-2 p-4 bg-[#006A67] dark:bg-[#004f4f] rounded-lg shadow-lg hidden"
   >
     <a
-      href="{{ url_for('home') }}"
+      href="{{ url_for('public.home') }}"
       class="text-white hover:bg-[#004f4f] px-3 py-2 rounded-md text-sm font-semibold {% if request.endpoint == 'home' %} bg-[#008080] bg-opacity-30 text-white {% endif %}"
     >
       Beranda
     </a>
     <a
-      href="{{ url_for('about') }}"
+      href="{{ url_for('public.about') }}"
       class="text-white hover:bg-[#004f4f] px-3 py-2 rounded-md text-sm font-semibold {% if request.endpoint == 'about' %} bg-[#008080] bg-opacity-30 text-white {% endif %}"
     >
       Tentang Kami
@@ -97,13 +97,13 @@
       Artikel
     </a>
     <a
-      href="{{ url_for('contact') }}"
+      href="{{ url_for('public.contact') }}"
       class="text-white hover:bg-[#004f4f] px-3 py-2 rounded-md text-sm font-semibold {% if request.endpoint == 'contact' %} bg-[#008080] bg-opacity-30 text-white {% endif %}"
     >
       Kontak Kami
     </a>
     <a
-      href="{{ url_for('login') }}"
+      href="{{ url_for('auth.login') }}"
       class="text-white hover:bg-[#004f4f] px-3 py-2 rounded-md text-sm font-semibold"
     >
       Login

@@ -24,6 +24,12 @@
         "aria-required-parent": "off",
         "aria-valid-attr-value": "off"
       }
+    ],
+    "axe/structure": [
+      "default",
+      {
+        "list": "off"
+      }
     ]
   }
 }

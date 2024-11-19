@@ -1,17 +1,19 @@
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='dist/css/output.css') }}"
+/>
 <div class="bg-white flex items-center justify-center min-h-screen">
   <div class="flex bg-white shadow-lg rounded-lg overflow-hidden max-w-4xl">
-    <!-- Left side with illustration -->
-    <div
-      class="hidden md:flex md:w-1/2 bg-gray-50 items-center justify-center"
-    >
+    <!-- Bagian kiri dengan ilustrasi -->
+    <div class="hidden md:flex md:w-1/2 bg-gray-50 items-center justify-center">
       <img
         src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/authentication/illustration.svg"
-        alt="Register Illustration"
+        alt="Ilustrasi Registrasi"
         class="w-3/4 h-auto"
       />
     </div>
 
-    <!-- Right side with form -->
+    <!-- Bagian kanan dengan form -->
     <div class="w-full md:w-1/2 p-8 md:p-10 lg:p-16">
       <div class="flex items-center mb-6">
         <svg
@@ -27,24 +29,38 @@
         <h2 class="text-3xl font-bold text-gray-800">Buat Akun</h2>
       </div>
       <p class="text-gray-600 mb-8">
-        Mulai daftar kemitraan anda segera. Sudah punya akun?
+        Mulai daftar kemitraan Anda segera. Sudah punya akun?
         <a
-          href="{{ url_for('login') }}"
+          href="{{ url_for('auth.login') }}"
           class="text-green-600 hover:underline"
           >Masuk.</a
         >
       </p>
 
-      <form action="#" method="POST" class="space-y-4">
-        <!-- Full Name -->
+      <form
+        action="{{ url_for('auth.register') }}"
+        method="POST"
+        class="space-y-4"
+      >
+        {% with messages = get_flashed_messages(with_categories=true) %} {% for
+        category, message in messages %}
+        <div
+          class="p-3 mb-4 rounded-md text-sm text-white bg-{{ 'red-500' if category == 'danger' else 'green-500' }}"
+        >
+          {{ message }}
+        </div>
+        {% endfor %} {% endwith %}
+
+        <!-- Nama User -->
         <div>
-          <label for="name" class="block text-sm font-medium text-gray-700"
-            >Nama Bank Sampah
+          <label for="nama_user" class="block text-sm font-medium text-gray-700"
+            >Nama Lengkap</label
+          >
           <input
             type="text"
-            id="name"
-            name="name"
-            placeholder="Bank sampah melati etc."
+            id="nama_user"
+            name="nama_user"
+            placeholder="Nama Lengkap Anda"
             required
             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-green-500 focus:border-green-500"
           />
@@ -67,9 +83,7 @@
 
         <!-- Password -->
         <div>
-          <label
-            for="password"
-            class="block text-sm font-medium text-gray-700"
+          <label for="password" class="block text-sm font-medium text-gray-700"
             >Password</label
           >
           <input
@@ -85,36 +99,37 @@
         <!-- Confirm Password -->
         <div>
           <label
-            for="confirm-password"
+            for="confirm_password"
             class="block text-sm font-medium text-gray-700"
-            >Confirm Password</label
+            >Konfirmasi Password</label
           >
           <input
             type="password"
-            id="confirm-password"
-            name="confirm-password"
+            id="confirm_password"
+            name="confirm_password"
             placeholder="••••••••"
             required
             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-green-500 focus:border-green-500"
           />
         </div>
 
+        <!-- Tombol Register -->
         <button
           type="submit"
           class="w-full py-2 px-4 bg-green-700 hover:bg-green-800 text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
         >
-          Buat akun kamu
+          Buat Akun Anda
         </button>
 
         <div class="flex items-center justify-center space-x-4 my-4">
-          <span class="text-gray-400">or</span>
+          <span class="text-gray-400">Atau</span>
         </div>
 
+        <!-- Tombol Google -->
         <div class="flex items-center justify-center space-x-4">
-          <!-- Google Button -->
           {% include 'components/btn-google.html' %}
         </div>
       </form>
     </div>
   </div>
-</body>
+</div>

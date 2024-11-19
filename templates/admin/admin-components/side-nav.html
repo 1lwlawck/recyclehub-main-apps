@@ -195,7 +195,7 @@
     <ul class="space-y-2 font-medium">
       <li>
         <a
-          href="{{ url_for('admin_dashboard') }}"
+          href="{{ url_for('admin.dashboard') }}"
           class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
         >
           <svg
@@ -219,7 +219,7 @@
       </li>
       <li>
         <a
-          href="{{ url_for('admin_dropoff') }}"
+          href="{{ url_for('admin.dropoff') }}"
           class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
         >
           <svg
@@ -243,7 +243,7 @@
       </li>
       <li>
         <a
-          href="{{ url_for('admin_riwayat') }}"
+          href="{{ url_for('admin.riwayat') }}"
           class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
         >
           <svg
@@ -265,10 +265,10 @@
           <span class="flex-1 ms-3 whitespace-nowrap">Riwayat</span>
         </a>
       </li>
-      <li></li>
+
       <li>
         <a
-          href="{{ url_for('admin_message') }}"
+          href="{{ url_for('admin.message') }}"
           class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
         >
           <svg
@@ -299,6 +299,42 @@
           >
         </a>
       </li>
+
+      {% if session['user']['role'] == 'superadmin' %}
+      <li>
+        <a
+          href="{{ url_for('admin.manage_user') }}"
+          class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+        >
+          <svg
+            class="w-6 h-6 text-gray-800 dark:text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M4 3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h1v2a1 1 0 0 0 1.707.707L9.414 13H15a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4Z"
+              clip-rule="evenodd"
+            />
+            <path
+              fill-rule="evenodd"
+              d="M8.023 17.215c.033-.03.066-.062.098-.094L10.243 15H15a3 3 0 0 0 3-3V8h2a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-1v2a1 1 0 0 1-1.707.707L14.586 18H9a1 1 0 0 1-.977-.785Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+
+          <span class="flex-1 ms-3 whitespace-nowrap">Manage User</span>
+          <span
+            class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300"
+            >SA</span
+          >
+        </a>
+      </li>
+      {% endif %}
 
       <li>
         <a
