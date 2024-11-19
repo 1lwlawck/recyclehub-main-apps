@@ -2241,6 +2241,11 @@ input[type="range"]::-ms-fill-lower {
   color: rgb(5 122 85 / var(--tw-text-opacity));
 }
 
+.text-green-700 {
+  --tw-text-opacity: 1;
+  color: rgb(4 108 78 / var(--tw-text-opacity));
+}
+
 .text-orange-500 {
   --tw-text-opacity: 1;
   color: rgb(255 90 31 / var(--tw-text-opacity));
@@ -2383,6 +2388,10 @@ input[type="range"]::-ms-fill-lower {
   transition-duration: 75ms;
 }
 
+.ease-out {
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+
 .\[-2\:space\] {
   -2: space;
 }
@@ -2407,8 +2416,24 @@ input[type="range"]::-ms-fill-lower {
   data_start: data end;
 }
 
+.\[endpos\:i\] {
+  endpos: i;
+}
+
+.\[endpos\:semicolon\+1\] {
+  endpos: semicolon+1;
+}
+
 .\[expand_pos_lower_index\:expand_pos_upper_index\] {
   expand_pos_lower_index: expand pos upper index;
+}
+
+.\[i\:i\+1\] {
+  i: i+1;
+}
+
+.\[i\:j\+tokcount\] {
+  i: j+tokcount;
 }
 
 .\[i\:j\] {
@@ -2459,8 +2484,32 @@ input[type="range"]::-ms-fill-lower {
   offset: next offset;
 }
 
+.\[ofs\:mlen\] {
+  ofs: mlen;
+}
+
+.\[p1\:p2\] {
+  p1: p2;
+}
+
+.\[p\:p\+3\] {
+  p: p+3;
+}
+
 .\[p\:p\] {
   p: p;
+}
+
+.\[parse_start\:parse_end\] {
+  parse_start: parse end;
+}
+
+.\[parseopt_notrack_start\:parseopt_notrack_end\] {
+  parseopt_notrack_start: parseopt notrack end;
+}
+
+.\[parseopt_start\:parseopt_end\] {
+  parseopt_start: parseopt end;
 }
 
 .\[pos\:end_pos\] {
@@ -2469,6 +2518,10 @@ input[type="range"]::-ms-fill-lower {
 
 .\[pos\:new_pos\] {
   pos: new pos;
+}
+
+.\[position\:item\.start\(\)\] {
+  position: item.start();
 }
 
 .\[position\:offset\] {
@@ -2489,6 +2542,10 @@ input[type="range"]::-ms-fill-lower {
 
 .\[start\:loc\] {
   start: loc;
+}
+
+.\[start\:pos\] {
+  start: pos;
 }
 
 .\[start\:stop\] {
@@ -2761,6 +2818,14 @@ input[type="range"]::-ms-fill-lower {
 
 .focus\:ring-offset-2:focus {
   --tw-ring-offset-width: 2px;
+}
+
+.disabled\:cursor-not-allowed:disabled {
+  cursor: not-allowed;
+}
+
+.disabled\:opacity-50:disabled {
+  opacity: 0.5;
 }
 
 .group:hover .group-hover\:text-gray-900 {
@@ -3258,6 +3323,10 @@ input[type="range"]::-ms-fill-lower {
     --tw-space-x-reverse: 0;
     margin-right: calc(4rem * var(--tw-space-x-reverse));
     margin-left: calc(4rem * calc(1 - var(--tw-space-x-reverse)));
+  }
+
+  .lg\:p-12 {
+    padding: 3rem;
   }
 
   .lg\:p-16 {
