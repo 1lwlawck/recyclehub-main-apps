@@ -1,92 +1,96 @@
-<div class="bg-white flex items-center justify-center min-h-screen">
+<div class="bg-gray-100 flex items-center justify-center h-screen">
   <div
-    class="flex flex-col md:flex-row bg-white shadow-none md:shadow-lg rounded-lg overflow-hidden max-w-lg md:max-w-4xl w-full"
+    class="flex flex-col md:flex-row bg-white border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] rounded-lg overflow-hidden max-w-lg md:max-w-4xl w-full"
   >
+    <!-- Kolom Ilustrasi -->
     <div
-      class="hidden md:flex md:w-1/2 bg-gray-50 items-center justify-center p-4"
+      class="hidden md:flex md:w-1/2 bg-green-100 items-center justify-center p-4 border-r-4 border-black"
     >
       <img
         src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/authentication/illustration.svg"
         alt="Ilustrasi Login"
-        class="w-3/4 h-auto"
+        class="w-3/4 h-auto drop-shadow-[4px_4px_0px_rgba(0,0,0,1)]"
       />
     </div>
-    <div class="w-full md:w-1/2 p-6 sm:p-8 md:p-10 lg:p-16">
-      <h2 class="text-2xl md:text-3xl font-bold text-gray-800">
-        Selamat Datang
-      </h2>
+    <!-- Kolom Form Login -->
+    <div class="w-full md:w-1/2 p-6 sm:p-8 md:p-10 lg:p-16 bg-white">
+      <h2 class="text-3xl font-bold text-gray-800 mb-4">Selamat Datang</h2>
       <p class="text-gray-600 mb-6 text-sm md:text-base">
         Mulai akses admin dashboard Anda segera. Belum punya akun mitra?
         <a
           href="{{ url_for('auth.register') }}"
-          class="text-green-600 hover:underline"
+          class="text-green-600 hover:underline font-bold"
         >
-          Daftar Kemitraan Sekarang</a
+          Daftar Kemitraan</a
         >
       </p>
       <form
         action="{{ url_for('auth.login') }}"
         method="POST"
-        class="space-y-4"
+        class="space-y-6"
       >
         <!-- Flash Messages -->
         {% with messages = get_flashed_messages(with_categories=true) %} {% for
         category, message in messages %}
         <div
-          class="p-3 mb-4 rounded-md text-sm text-white bg-{{ 'red-500' if category == 'danger' else 'green-500' }} flash-message"
+          class="p-3 mb-4 rounded-md text-sm text-white bg-{{ 'red-500' if category == 'danger' else 'green-500' }} border-2 border-black"
         >
           {{ message }}
         </div>
         {% endfor %} {% endwith %}
 
-        <div class="space-y-4">
-          <div>
-            <label for="email" class="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="banksampah@gmail.com"
-              required
-              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-green-500 focus:border-green-500"
-            />
-          </div>
-          <div>
-            <label
-              for="password"
-              class="block text-sm font-medium text-gray-700"
-            >
-              Kata Sandi
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              placeholder="••••••••"
-              required
-              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-green-500 focus:border-green-500"
-            />
-          </div>
+        <!-- Input Email -->
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-800">
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="banksampah@gmail.com"
+            required
+            class="mt-1 block w-full px-3 py-2 border-2 border-black rounded-md text-gray-800 focus:outline-none focus:ring-green-500 focus:border-green-500"
+          />
         </div>
 
-        <div class="flex items-center justify-between text-sm">
-          <label class="flex items-center text-gray-600">
-            <input type="checkbox" name="remember" class="mr-2 leading-tight" />
+        <!-- Input Password -->
+        <div class="mt-4">
+          <label for="password" class="block text-sm font-medium text-gray-800">
+            Kata Sandi
+          </label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="••••••••"
+            required
+            class="mt-1 block w-full px-3 py-2 border-2 border-black rounded-md text-gray-800 focus:outline-none focus:ring-green-500 focus:border-green-500"
+          />
+        </div>
+
+        <!-- Checkbox dan Lupa Kata Sandi -->
+        <div class="flex items-center justify-between text-sm mt-4">
+          <label class="flex items-center text-gray-800">
+            <input
+              type="checkbox"
+              name="remember"
+              class="mr-2 leading-tight border-2 border-black"
+            />
             Ingat Saya
           </label>
           <a
             href="{{ url_for('password.forgot_password') }}"
-            class="text-green-600 hover:underline"
+            class="text-green-600 hover:underline font-bold"
           >
             Lupa Kata Sandi?
           </a>
         </div>
 
+        <!-- Tombol Submit -->
         <button
           type="submit"
-          class="w-full py-2 px-4 bg-green-700 hover:bg-green-800 text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+          class="mt-4 w-full py-2 px-4 bg-green-500 hover:bg-green-600 text-white font-bold rounded-md border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] transition-transform transform hover:scale-105"
         >
           Masuk ke Akun Anda
         </button>

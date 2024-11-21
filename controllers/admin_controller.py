@@ -65,3 +65,9 @@ def manage_user():
     except Exception as e:
         flash('Terjadi kesalahan saat memuat halaman manage user.', 'danger')
         return jsonify({'message': 'Error loading manage user', 'error': str(e)}), 500
+
+@admin_blueprint.route('/settings')
+@login_required
+@role_required(['admin', 'superadmin'])
+def settings():
+    return render_template('admin/settings-admin.html')

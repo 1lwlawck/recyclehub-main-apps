@@ -30,7 +30,8 @@ def login():
             # Validasi password
             if check_password_hash(user.password_hash, password):
                 # Simpan data session user
-                session['user'] = {'email': user.email, 'role': user.role}
+                session['user'] = { 'id': user.id, 'nama_user': user.nama_user, 'email': user.email, 'role': user.role  }
+                
 
                 # Logika role-based redirect
                 if user.role == 'superadmin':
