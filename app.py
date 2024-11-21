@@ -2,14 +2,19 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
+import os 
+from dotenv import load_dotenv
 
 # Inisialisasi aplikasi Flask
 app = Flask(__name__)
 
+# Load environment variables from .env file
+load_dotenv()
+
 # Konfigurasi aplikasi
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/recycle_hub'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'super_secret_key_that_is_very_secure'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = os.getenv('SQLALCHEMY_TRACK_MODIFICATIONS') == 'True'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 # Inisialisasi ekstensi Flask
 db = SQLAlchemy(app)

@@ -21,21 +21,32 @@ def login():
         user = User.query.filter_by(email=email).first()
 
         if user:
+            # Cek apakah akun sudah diverifikasi
             if not user.is_verified:
                 session['email_to_verify'] = email
                 flash('Akun Anda belum diverifikasi. Silakan verifikasi email Anda.', 'warning')
                 return redirect(url_for('auth.verify_email'))
 
+            # Validasi password
             if check_password_hash(user.password_hash, password):
+                # Simpan data session user
                 session['user'] = {'email': user.email, 'role': user.role}
-                flash('Login berhasil!', 'success')
-                return redirect(url_for('admin.dashboard') if user.role == 'admin' else url_for('public.home'))
+
+                # Logika role-based redirect
+                if user.role == 'superadmin':
+                    return redirect(url_for('admin.dashboard'))
+                elif user.role == 'admin':
+                    return redirect(url_for('admin.dashboard'))
+                else:
+                    flash('Anda tidak memiliki izin untuk mengakses halaman ini.', 'danger')
+                    return redirect(url_for('auth.login'))
             else:
                 flash('Password salah!', 'danger')
         else:
             flash('Email tidak terdaftar.', 'danger')
 
     return render_template('page/login-page.html')
+
 
 @auth_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
@@ -109,3 +120,10 @@ def verify_email():
         if user and user.otp_expiry else 0
     )
     return render_template('page/verify-email-page.html', remaining_time=remaining_time)
+
+@auth_blueprint.route('/logout', methods=['GET', 'POST'])
+def logout():
+    session.clear()
+    return redirect(url_for('public.home'))
+
+

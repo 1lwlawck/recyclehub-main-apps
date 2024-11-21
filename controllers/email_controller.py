@@ -5,14 +5,19 @@ from datetime import datetime, timedelta
 import random
 import smtplib
 from email.mime.text import MIMEText
+import os
+from dotenv import load_dotenv
 
 email_blueprint = Blueprint('email', __name__, url_prefix='/email')
 
-# Konfigurasi email
-SMTP_SERVER = "smtp.gmail.com"
-SMTP_PORT = 587
-EMAIL_ADDRESS = "denyfaishalardiyan@gmail.com"
-EMAIL_PASSWORD = "vedm wxif upso anca"
+# Load .env file
+load_dotenv()
+
+# Ambil variabel dari .env
+SMTP_SERVER = os.getenv("SMTP_SERVER")
+SMTP_PORT = os.getenv("SMTP_PORT")
+EMAIL_ADDRESS = os.getenv("EMAIL_ADDRESS")
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
 def send_email(subject, body, recipient_email):
     try:
