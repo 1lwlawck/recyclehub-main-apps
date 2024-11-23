@@ -1,0 +1,257 @@
+<div class="dark:bg-gray-900 text-gray-100 font-inconsolata min-h-screen p-10">
+  <!-- Grid Container -->
+  <div class="grid grid-cols-[2fr,1fr] gap-8 mb-4 mt-[50px] ml-[250px]">
+    <!-- Kolom 1: Personal Information -->
+    <div
+      class="flex flex-col rounded bg-gray-50 border-4 border-green-800 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] p-8 transition dark:bg-gray-800 dark:text-gray-100"
+    >
+      <!-- Title -->
+      <h1 class="text-2xl font-bold dark:text-gray-100 text-black mb-4">
+        Personal Information
+      </h1>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mb-6">
+        Use a permanent address where you can receive mail.
+      </p>
+
+      <div class="flex items-center gap-4 mb-6">
+        <!-- Preview Avatar -->
+        <img
+          id="avatar-preview"
+          class="w-20 h-20 rounded-full border-4 border-green-500 shadow-[4px_4px_0px_rgba(0,0,0,1)]"
+          src="{{ url_for('static', filename='uploads/avatars/' + session['user'].get('avatar', 'default-avatar.png')) }}?t={{ time() }}"
+          alt="Profile Picture"
+        />
+
+        <!-- Tombol untuk Upload Avatar -->
+        <button
+          type="button"
+          class="px-4 py-2 bg-green-500 text-gray-900 font-bold rounded shadow hover:bg-green-400"
+          onclick="triggerFileInput()"
+        >
+          Change Avatar
+        </button>
+
+        <!-- Input File (Disembunyikan) -->
+        <input
+          type="file"
+          id="avatar-file"
+          name="file"
+          accept=".jpg, .jpeg, .png, .gif"
+          class="hidden"
+          onchange="uploadAvatar(this)"
+        />
+
+        <p class="text-xs text-gray-600 dark:text-gray-400">
+          JPG, GIF, or PNG. 1MB max.
+        </p>
+      </div>
+
+      <!-- Form Fields -->
+      <form
+        action="/settings"
+        method="POST"
+        class="space-y-6"
+        enctype="multipart/form-data"
+        id="settings-form"
+        onsubmit="event.preventDefault(); saveProfile();"
+      >
+        <!-- Nama Bank Sampah  -->
+        <div>
+          <label
+            for="last-name"
+            class="block text-sm font-bold mb-2 text-black dark:text-gray-100"
+            >NAMA BANK SAMPAH</label
+          >
+          <input
+            type="text"
+            id="nama_user"
+            placeholder=""
+            class="w-full px-4 py-2 text-gray-900 bg-gray-100 border-2 border-green-500 rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:ring-2 focus:ring-green-400 focus:outline-none dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-green-500"
+            value="{{ session['user']['nama_user'] }}"
+          />
+        </div>
+
+        <!-- Email Address -->
+        <div>
+          <label
+            for="email_address"
+            class="block text-sm font-bold mb-2 text-black dark:text-gray-100"
+            >ALAMAT EMAIL</label
+          >
+          <input
+            type="email"
+            id="email-address"
+            name="email"
+            placeholder=""
+            class="w-full px-4 py-2 bg-gray-100 border-2 border-green-500 rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:ring-2 focus:ring-green-400 focus:outline-none dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-green-500 text-gray-900"
+            value="{{ session['user']['email'] }}"
+          />
+        </div>
+
+        <!-- role -->
+        <div>
+          <label
+            for="role"
+            class="block text-sm font-bold mb-2 text-black dark:text-gray-100"
+            >ROLE PENGGUNA</label
+          >
+          <input
+            type="text"
+            id="role"
+            name="role"
+            placeholder=""
+            class="w-full px-4 py-2 bg-gray-400 font-bold uppercase border-2 border-green-500 rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:ring-2 focus:ring-green-400 focus:outline-none dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-green-500 text-gray-900"
+            onclick=""
+            value="{{ session['user']['role'] }} "
+            disabled
+          />
+        </div>
+
+        <!-- Save Button -->
+        <button
+          type="submit"
+          class="px-6 py-3 bg-blue-500 text-gray-100 font-bold rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:bg-blue-400 active:bg-blue-600 mt-4 dark:bg-blue-700 dark:hover:bg-blue-600 dark:active:bg-blue-800"
+        >
+          Save
+        </button>
+      </form>
+    </div>
+
+    <!-- Kolom 2: Change Password -->
+    <div
+      class="flex flex-col rounded bg-gray-50 border-4 border-green-800 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] p-8 transition dark:bg-gray-800 dark:text-gray-100"
+    >
+      <!-- Title -->
+      <h1 class="text-2xl font-bold dark:text-gray-100 text-black mb-4">
+        Change Password
+      </h1>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mb-6">
+        Update your password associated with your account.
+      </p>
+
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %}
+      <div class="mb-4">
+        {% for category, message in messages %}
+        <div
+          class="p-2 mb-2 text-sm text-white bg-{{ 'red' if category == 'danger' else 'green' }}-500 rounded"
+        >
+          {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %}
+
+      <!-- Form Fields -->
+      <form
+        action="{{ url_for('password.change_password') }}"
+        method="POST"
+        class="space-y-6"
+        id="change-password-form"
+      >
+        <!-- Current Password -->
+        <div class="relative">
+          <label
+            for="current-password"
+            class="block text-sm font-bold mb-2 text-black dark:text-gray-100"
+            >PASSWORD LAMA</label
+          >
+          <input
+            type="password"
+            id="current_password"
+            name="current_password"
+            class="w-full px-4 py-2 bg-gray-100 border-2 border-green-500 rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:ring-2 focus:ring-green-400 focus:outline-none dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-green-500 text-gray-900 pr-10"
+            required
+          />
+          <button
+            type="button"
+            tabindex="-1"
+            onclick="togglePasswordVisibility('current_password', this)"
+            class="absolute inset-y-0 right-3 flex items-center text-gray-600 dark:text-gray-400 mt-7"
+          >
+            🙈
+          </button>
+        </div>
+
+        <!-- New Password -->
+        <div class="relative">
+          <label
+            for="new-password"
+            class="block text-sm font-bold mb-2 text-black dark:text-gray-100"
+            >PASSWORD BARU</label
+          >
+          <input
+            type="password"
+            id="new_password"
+            name="new_password"
+            class="w-full px-4 py-2 bg-gray-100 border-2 border-green-500 rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:ring-2 focus:ring-green-400 focus:outline-none dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-green-500 text-gray-900 pr-10"
+            required
+          />
+          <button
+            type="button"
+            tabindex="-1"
+            onclick="togglePasswordVisibility('new_password', this)"
+            class="absolute inset-y-0 right-3 flex items-center text-gray-600 dark:text-gray-400 mt-7"
+          >
+            🙈
+          </button>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="relative">
+          <label
+            for="confirm-password"
+            class="block text-sm font-bold mb-2 text-black dark:text-gray-100"
+            >KONFIRMASI PASSWORD BARU</label
+          >
+          <input
+            type="password"
+            id="confirm_password"
+            name="confirm_password"
+            class="w-full px-4 py-2 bg-gray-100 border-2 border-green-500 rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:ring-2 focus:ring-green-400 focus:outline-none dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-green-500 text-gray-900 pr-10"
+            required
+          />
+          <button
+            type="button"
+            tabindex="-1"
+            onclick="togglePasswordVisibility('confirm_password', this)"
+            class="absolute inset-y-0 right-3 flex items-center text-gray-600 dark:text-gray-400 mt-7"
+          >
+            🙈
+          </button>
+        </div>
+
+        <!-- Save Button -->
+        <button
+          type="submit"
+          class="px-6 py-3 bg-blue-500 text-gray-100 font-bold rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:bg-blue-400 active:bg-blue-600 mt-4 dark:bg-blue-700 dark:hover:bg-blue-600 dark:active:bg-blue-800"
+        >
+          Save
+        </button>
+      </form>
+    </div>
+  </div>
+  <!-- Delete Account Section -->
+  <div
+    class="flex items-center justify-between rounded bg-gray-50 border-4 border-red-600 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] p-8 transition dark:bg-gray-800 dark:text-gray-100 mt-8 ml-[250px]"
+  >
+    <div>
+      <h1 class="text-xl font-bold dark:text-gray-100 text-black">
+        HAPUS AKUN ?
+      </h1>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+        No longer want to use our service? You can delete your account here.
+        This action is not reversible. All information related to this account
+        will be deleted permanently.
+      </p>
+    </div>
+    <button
+      class="px-6 py-3 bg-red-600 text-gray-100 font-bold rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:bg-red-500 active:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 dark:active:bg-red-800"
+    >
+      Yes, delete my account
+    </button>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/admin/settings.js') }}"></script>

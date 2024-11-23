@@ -30,8 +30,6 @@ from controllers.password_controller import password_blueprint
 from controllers.users_controller import user_blueprint
 
 
-
-
 # Registrasi blueprint
 app.register_blueprint(public_blueprint, url_prefix='/')  # Tambahkan prefix jika diperlukan
 app.register_blueprint(admin_blueprint, url_prefix='/admin')

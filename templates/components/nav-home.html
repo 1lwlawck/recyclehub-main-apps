@@ -42,14 +42,32 @@
       </a>
     </div>
 
-    <!-- Button (desktop view) -->
-    <div class="hidden md:flex">
+    <div class="hidden md:flex items-center space-x-4">
+      {% if 'user' in session %}
+      <!-- Tombol Dashboard -->
+      <a
+        href="{{ url_for('admin.dashboard') }}"
+        class="text-black dark:text-white bg-[#C7F3A4] hover:bg-[#B2EE8E] active:bg-[#9EE778] px-4 py-2 rounded-lg border-2 border-black shadow-[2px_2px_0px_rgba(0,0,0,1)] font-semibold text-sm"
+      >
+        Dashboard
+      </a>
+
+      <!-- Tombol Logout -->
+      <a
+        href="{{ url_for('auth.logout') }}"
+        class="text-black dark:text-white bg-[#FF6B6B] hover:bg-[#FF4C4C] active:bg-[#FF3333] px-4 py-2 rounded-lg border-2 border-black shadow-[2px_2px_0px_rgba(0,0,0,1)] font-semibold text-sm"
+      >
+        Logout
+      </a>
+      {% else %}
+      <!-- Tombol Masuk -->
       <a
         href="{{ url_for('auth.login') }}"
-        class="text-black dark:text-white bg-[#C7F3A4] hover:bg-[#B2EE8E] active:bg-[#9EE778] px-4 py-2 rounded-lg border-2 border-black shadow-[2px_2px_0px_rgba(0,0,0,1)] font-semibold text-sm {% if request.endpoint == 'auth.login' %} bg-[#41B3A2] dark:bg-blue-700 {% endif %}"
+        class="text-black dark:text-white bg-[#C7F3A4] hover:bg-[#B2EE8E] active:bg-[#9EE778] px-4 py-2 rounded-lg border-2 border-black shadow-[2px_2px_0px_rgba(0,0,0,1)] font-semibold text-sm"
       >
         Masuk
       </a>
+      {% endif %}
     </div>
 
     <!-- Mobile Menu Button -->
@@ -78,7 +96,7 @@
   <!-- Mobile menu -->
   <div
     id="mobile-menu"
-    class="md:hidden flex flex-col space-y-2 p-4 bg-[#F0F0F0] rounded-lg border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] dark:bg-[#303030] w-full hidden"
+    class="md:hidden flex-col space-y-2 p-4 bg-[#F0F0F0] rounded-lg border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] dark:bg-[#303030] w-full hidden"
   >
     <a
       href="{{ url_for('public.home') }}"

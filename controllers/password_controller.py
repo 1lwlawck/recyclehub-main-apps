@@ -1,10 +1,13 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from flask import Blueprint, render_template, request, jsonify, redirect, url_for, flash, session
 from models.models import User
 from app import db
 from datetime import datetime, timedelta
-from werkzeug.security import generate_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from controllers.email_controller import send_email
 import random
+from utils import login_required , role_required
+
+
 
 password_blueprint = Blueprint('password', __name__, url_prefix='/password')
 
@@ -58,3 +61,41 @@ def reset_password(token):
         return redirect(url_for('auth.login'))
 
     return render_template('page/reset-password-page.html', token=token)
+
+
+@password_blueprint.route('/change-password', methods=['POST'])
+@login_required
+def change_password():
+    # Ambil data dari form
+    current_password = request.form.get('current_password')
+    new_password = request.form.get('new_password')
+    confirm_password = request.form.get('confirm_password')
+
+    # Validasi input
+    if not current_password or not new_password or not confirm_password:
+        flash('Semua field wajib diisi.', 'danger')
+        return redirect(url_for('admin.settings'))
+
+    # Ambil user dari session
+    user = User.query.filter_by(email=session['user']['email']).first()
+    if not user:
+        flash('User tidak ditemukan.', 'danger')
+        return redirect(url_for('admin.settings'))
+
+    # Validasi password lama
+    if not check_password_hash(user.password_hash, current_password):
+        flash('Password lama salah.', 'danger')
+        return redirect(url_for('admin.settings'))
+
+    # Validasi password baru dan konfirmasi
+    if new_password != confirm_password:
+        flash('Password baru dan konfirmasi tidak cocok.', 'danger')
+        return redirect(url_for('admin.settings'))
+
+    # Update password di database
+    user.password_hash = generate_password_hash(new_password)
+    db.session.commit()
+
+    flash('Password berhasil diubah.', 'success')
+    return redirect(url_for('admin.settings'))
+

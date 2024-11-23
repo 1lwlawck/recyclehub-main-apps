@@ -50,23 +50,32 @@
             name="email"
             placeholder="banksampah@gmail.com"
             required
-            class="mt-1 block w-full px-3 py-2 border-2 border-black rounded-md text-gray-800 focus:outline-none focus:ring-green-500 focus:border-green-500"
+            class="w-full px-4 py-2 bg-gray-100 border-2 border-green-500 rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:ring-2 focus:ring-green-400 focus:outline-none dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-green-500 text-gray-900 pr-10"
           />
         </div>
 
         <!-- Input Password -->
-        <div class="mt-4">
+        <div class="mt-4 relative">
           <label for="password" class="block text-sm font-medium text-gray-800">
             Kata Sandi
           </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="••••••••"
-            required
-            class="mt-1 block w-full px-3 py-2 border-2 border-black rounded-md text-gray-800 focus:outline-none focus:ring-green-500 focus:border-green-500"
-          />
+          <div class="relative">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="••••••••"
+              required
+              class="w-full px-4 py-2 bg-gray-100 border-2 border-green-500 rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:ring-2 focus:ring-green-400 focus:outline-none dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-green-500 text-gray-900 pr-10"
+            />
+            <button
+              type="button"
+              onclick="togglePasswordVisibility('password', this)"
+              class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 dark:text-gray-400"
+            >
+              🙈
+            </button>
+          </div>
         </div>
 
         <!-- Checkbox dan Lupa Kata Sandi -->
@@ -76,6 +85,8 @@
               type="checkbox"
               name="remember"
               class="mr-2 leading-tight border-2 border-black"
+              name="remember"
+              value="yes"
             />
             Ingat Saya
           </label>
@@ -100,3 +111,4 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/flash-message.js') }}"></script>
+<script src="{{ url_for('static', filename='js/toggle_password_visibility.js') }}"></script>
