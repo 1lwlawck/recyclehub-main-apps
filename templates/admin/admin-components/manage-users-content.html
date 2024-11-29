@@ -1,0 +1,113 @@
+<div class="p-4 sm:ml-64 font-roboto">
+  <div class="mt-20">
+    <!-- Form Pencarian -->
+    <form class="max-w-md mb-4">
+      <label
+        for="default-search"
+        class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+        >Search</label
+      >
+      <div class="relative">
+        <input
+          type="search"
+          id="search-input"
+          class="block w-full p-4 pr-10 text-sm text-gray-900 border-1 border-black rounded-lg bg-slate-300 focus:ring-black focus:border-black shadow-neo dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:ring-white dark:focus:border-white"
+          placeholder="Cari Nama atau Email..."
+        />
+      </div>
+    </form>
+
+    <!-- Tabel Data -->
+    <div
+      class="overflow-x-auto mt-8 rounded-lg border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] font-inconsolata"
+    >
+      <table
+        id="user-table"
+        class="table-auto w-full text-sm bg-white text-gray-700 border-collapse dark:bg-gray-800 dark:text-gray-200"
+      >
+        <thead
+          class="bg-gradient-to-r from-yellow-400 to-orange-500 text-black border-b-4 border-black dark:text-white"
+        >
+          <tr>
+            <th
+              class="px-6 py-3 text-center font-extrabold text-lg uppercase border-r-2 border-black"
+            >
+              ID
+            </th>
+            <th
+              class="px-6 py-3 text-center font-extrabold text-lg uppercase border-r-2 border-black"
+            >
+              Nama User
+            </th>
+            <th
+              class="px-6 py-3 text-center font-extrabold text-lg uppercase border-r-2 border-black"
+            >
+              Email
+            </th>
+            <th
+              class="px-6 py-3 text-center font-extrabold text-lg uppercase border-r-2 border-black"
+            >
+              Role
+            </th>
+            <th
+              class="px-6 py-3 text-center font-extrabold text-lg uppercase border-r-2 border-black"
+            >
+              Verifikasi
+            </th>
+            <th
+              class="px-6 py-3 text-center font-extrabold text-lg uppercase border-r-2 border-black"
+            >
+              OTP
+            </th>
+            <th class="px-6 py-3 text-center font-extrabold text-lg uppercase">
+              Aksi
+            </th>
+          </tr>
+        </thead>
+
+        <tbody
+          id="user-table-body"
+          class="divide-y-4 divide-black dark:divide-gray-600"
+        >
+          <!-- Data akan diisi secara dinamis dengan JavaScript -->
+        </tbody>
+      </table>
+      <div id="pagination" class="flex justify-start px-5 py-4"></div>
+    </div>
+
+    <!-- Modal Konfirmasi Delete -->
+    <div
+      id="deleteModal"
+      class="fixed inset-0 items-center justify-center bg-black bg-opacity-60 dark:bg-gray-900 dark:bg-opacity-80 hidden z-50 flex"
+    >
+      <div
+        class="w-96 px-8 py-6 bg-white border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] rounded-lg dark:bg-gray-800 dark:border-gray-600"
+      >
+        <div>
+          <h2 class="text-2xl font-bold mb-4 text-black dark:text-white">
+            Konfirmasi Hapus
+          </h2>
+          <p id="deleteModalText" class="mb-4 text-gray-800 dark:text-gray-300">
+            Apakah Anda yakin ingin menghapus user ini?
+          </p>
+          <div class="flex space-x-4 justify-center">
+            <button
+              id="cancelDelete"
+              class="h-12 px-6 py-2 bg-gray-200 border-2 border-black rounded-md shadow-[4px_4px_0px_rgba(0,0,0,1)] text-black hover:bg-gray-300 active:bg-gray-400 dark:bg-gray-700 dark:hover:bg-gray-600 dark:active:bg-gray-500 dark:text-white"
+            >
+              Batal
+            </button>
+            <button
+              id="confirmDelete"
+              class="h-12 px-6 py-2 bg-red-400 border-2 border-black rounded-md shadow-[4px_4px_0px_rgba(0,0,0,1)] text-black hover:bg-red-500 active:bg-red-600 dark:bg-red-700 dark:hover:bg-red-600 dark:active:bg-red-500 dark:text-white"
+            >
+              Hapus
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/manage-users.js') }}"></script>
+  </div>
+</div>

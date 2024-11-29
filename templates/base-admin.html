@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="{{ url_for('static', filename='dist/css/output.css') }}"
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{{ url_for('static', filename='images/favicon.ico') }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>{% block title %}Default Title{% endblock %}</title>
+  </head>
+  <body class="bg-gray-100 dark:bg-gray-900 min-h-screen">
+    <!-- sidebar.html -->
+    {% include "admin/admin-components/side-nav.html" %}
+
+    <main>{% block content %} {% endblock %}</main>
+
+    <!-- Modal Logout -->
+    {% include "admin/admin-components/logout-modal.html" %}
+
+    <script src="/static/js/dropdown.js"></script>
+    <script src="/static/js/modal.js"></script>
+    <script src="/static/js/theme-toggle.js"></script>
+    <script src="/static/js/dropdown.js"></script>
+  </body>
+</html>
