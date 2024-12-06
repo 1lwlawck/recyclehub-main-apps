@@ -176,6 +176,40 @@
         </a>
       </li>
 
+      <li>
+        {% if session['user']['role'] == 'superadmin' %}
+        <a
+          href="{{ url_for('admin.manage_user') }}"
+          class="flex items-center p-4 bg-yellow-100 border-4 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] rounded-md hover:scale-105 transition-transform dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600"
+        >
+          <svg
+            class="w-6 h-6 text-black dark:text-white"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M4 3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h1v2a1 1 0 0 0 1.707.707L9.414 13H15a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4Z"
+              clip-rule="evenodd"
+            />
+            <path
+              fill-rule="evenodd"
+              d="M8.023 17.215c.033-.03.066-.062.098-.094L10.243 15H15a3 3 0 0 0 3-3V8h2a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-1v2a1 1 0 0 1-1.707.707L14.586 18H9a1 1 0 0 1-.977-.785Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <span class="ml-4 font-bold text-black dark:text-white"
+            >Manage User</span
+          >
+          <span
+            class="inline-flex items-center justify-center w-6 h-6 bg-red-500 text-white font-bold text-xs rounded-full ml-auto dark:bg-red-400"
+          >
+            SA
+          </span>
+        </a>
+        {% endif %}
+      </li>
+
       <!-- Drop Off -->
       <li>
         <a
@@ -252,59 +286,6 @@
       </li>
 
       <!-- Manage User -->
-      <li>
-        {% if session['user']['role'] == 'superadmin' %}
-        <a
-          href="{{ url_for('admin.manage_user') }}"
-          class="flex items-center p-4 bg-yellow-100 border-4 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] rounded-md hover:scale-105 transition-transform dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600"
-        >
-          <svg
-            class="w-6 h-6 text-black dark:text-white"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M4 3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h1v2a1 1 0 0 0 1.707.707L9.414 13H15a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4Z"
-              clip-rule="evenodd"
-            />
-            <path
-              fill-rule="evenodd"
-              d="M8.023 17.215c.033-.03.066-.062.098-.094L10.243 15H15a3 3 0 0 0 3-3V8h2a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-1v2a1 1 0 0 1-1.707.707L14.586 18H9a1 1 0 0 1-.977-.785Z"
-              clip-rule="evenodd"
-            />
-          </svg>
-          <span class="ml-4 font-bold text-black dark:text-white"
-            >Manage User</span
-          >
-          <span
-            class="inline-flex items-center justify-center w-6 h-6 bg-red-500 text-white font-bold text-xs rounded-full ml-auto dark:bg-red-400"
-          >
-            SA
-          </span>
-        </a>
-        {% endif %}
-      </li>
-
-      <li>
-        <a
-          href="{{ url_for('admin.riwayat') }}"
-          class="flex items-center p-4 bg-yellow-100 border-4 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] rounded-md hover:scale-105 transition-transform dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600"
-        >
-          <svg
-            class="w-6 h-6 text-black dark:text-white"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M8 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1h2a2 2 0 0 1 2 2v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2Zm6 1h-4v2H9a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2h-1V4Zm-3 8a1 1 0 0 1 1-1h3a1 1 0 1 1 0 2h-3a1 1 0 0 1-1-1Zm-2-1a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H9Zm2 5a1 1 0 0 1 1-1h3a1 1 0 1 1 0 2h-3a1 1 0 0 1-1-1Zm-2-1a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H9Z"
-              clip-rule="evenodd"
-            />
-          </svg>
-          <span class="ml-4 font-bold text-black dark:text-white">Riwayat</span>
-        </a>
-      </li>
 
       <!-- Log Out -->
       <li>

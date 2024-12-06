@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "aos": "^2.3.4",
+    "apexcharts": "^4.1.0",
     "flowbite": "^2.5.2",
     "flowbite-typography": "^1.0.4"
   }

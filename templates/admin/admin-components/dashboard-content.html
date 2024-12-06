@@ -33,30 +33,72 @@
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
       <!-- Kolom 1 -->
       <div
-        class="flex items-center justify-center h-24 rounded bg-yellow-100 border-4 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition"
-      ></div>
+        class="flex items-center justify-center h-96 w-full rounded bg-yellow-100 border-4 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition"
+      >
+        <div id="hs-single-bar-chart"></div>
+      </div>
+
       <!-- Kolom 2 -->
-      <div
-        class="flex items-center justify-center h-24 rounded bg-blue-100 border-4 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition"
-      ></div>
+      <div>
+        {% if session['user']['role'] == 'superadmin' %}
+        <div
+          class="flex flex-col items-center justify-center w-full p-4 bg-pink-100 border-4 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition"
+        >
+          <!-- Card Title -->
+          <div
+            class="w-full flex items-center justify-center text-black font-bold text-xl mb-4"
+          >
+            Analisis Sentimen Pengguna
+          </div>
+
+          <!-- Chart Canvas -->
+          <div class="w-full h-80 flex items-center justify-center">
+            <canvas id="pie-chart" class="w-3/4 h-3/4"></canvas>
+          </div>
+        </div>
+        {% elif session['user']['role'] == 'admin' %}
+        <div
+          class="flex flex-col items-center justify-center w-full p-4 bg-pink-100 border-4 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition"
+        >
+          <!-- Card Title -->
+          <div
+            class="w-full flex items-center justify-center text-black font-bold text-xl mb-4"
+          >
+            Analisis Sentimen Customers
+          </div>
+
+          <!-- Chart Canvas -->
+          <div class="w-full h-80 flex items-center justify-center">
+            <canvas id="pie-chart" class="w-3/4 h-3/4"></canvas>
+          </div>
+        </div>
+        {% endif %}
+      </div>
       <!-- Kolom 3 -->
       <div
-        class="flex items-center justify-center h-24 rounded bg-pink-100 border-4 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition"
+        class="flex items-center justify-center h-80 rounded bg-blue-100 border-4 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition"
       ></div>
     </div>
+  </div>
 
-    <!-- Grid Row 3 -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-      <!-- Kolom 1 -->
-      <div
-        class="flex items-center justify-center h-28 rounded bg-green-100 border-4 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition"
-      ></div>
-      <!-- Kolom 2 -->
-      <div
-        class="flex items-center justify-center h-28 rounded bg-purple-100 border-4 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition"
-      ></div>
-    </div>
+  <!-- Grid Row 3 -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+    <!-- Kolom 1 -->
+    <div
+      class="flex items-center justify-center h-28 rounded bg-green-100 border-4 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition"
+    ></div>
+    <!-- Kolom 2 -->
+    <div
+      class="flex items-center justify-center h-28 rounded bg-purple-100 border-4 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition"
+    ></div>
   </div>
 </div>
 
 <script src="{{ url_for('static', filename='js/components/greeting-card.js') }}"></script>
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Initialize Pie Chart -->
+<script src="{{ url_for('static', filename='js/components/pie-chart.js') }}"></script>
+<script src="{{ url_for('static', filename='js/components/barChart.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>

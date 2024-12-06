@@ -179,7 +179,7 @@ function confirmDelete() {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          showAlert("User berhasil dihapus!", "danger");
+          showAlert("User berhasil dihapus!", "success");
           fetchUsers(currentPage, searchQuery); // Refresh tabel
         } else {
           showAlert("Gagal menghapus user: " + data.message, "danger");
