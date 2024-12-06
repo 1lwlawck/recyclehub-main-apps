@@ -51,7 +51,7 @@ from controllers.chatbot_controller import chatbot_blueprint
 
 # Impor blueprint API
 from api.auth_api import auth_api_blueprint 
-from api.resend_email import resend_email_blueprint
+from api.resend_otp import resend_otp_blueprint
 from api.forgot_password import password_api_blueprint
 
 
@@ -67,7 +67,7 @@ app.register_blueprint(chatbot_blueprint)
 
 # Registrasi blueprint API
 app.register_blueprint(auth_api_blueprint)
-app.register_blueprint(resend_email_blueprint)
+app.register_blueprint(resend_otp_blueprint)
 app.register_blueprint(password_api_blueprint)
 
 

@@ -7,12 +7,15 @@ from controllers.email_controller import send_email
 from flask_jwt_extended import (
     create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 )
+
+
 import random
+import os
 
 auth_api_blueprint = Blueprint('auth_api', __name__, url_prefix='/api/auth')
 
 # Konfigurasi JWT di app utama (app.py)
-app.config['JWT_SECRET_KEY'] = 'your-secret-key'  # Gantilah dengan key yang lebih aman
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')  # Gantilah dengan key yang lebih aman
 
 # Login API
 @auth_api_blueprint.route('/login', methods=['POST'])
@@ -59,46 +62,52 @@ def api_login():
 # Register API
 @auth_api_blueprint.route('/register', methods=['POST'])
 def api_register():
-    data = request.get_json()
+    try:
+        data = request.get_json()
 
-    nama_user = data.get('nama_user')
-    email = data.get('email')
-    password = data.get('password')
-    confirm_password = data.get('confirm_password')
+        nama_user = data.get('nama_user')
+        email = data.get('email')
+        password = data.get('password')
+        confirm_password = data.get('confirm_password')
 
-    if len(password) < 8:
-        return jsonify({'message': 'Password harus memiliki minimal 8 karakter!'}), 400
+        if len(password) < 8:
+            return jsonify({'message': 'Password harus memiliki minimal 8 karakter!'}), 400
 
-    if '@' not in email or '.' not in email.split('@')[-1]:
-        return jsonify({'message': 'Format email tidak valid!'}), 400
+        if '@' not in email or '.' not in email.split('@')[-1]:
+            return jsonify({'message': 'Format email tidak valid!'}), 400
 
-    if User.query.filter_by(email=email).first():
-        return jsonify({'message': 'Email sudah terdaftar!'}), 400
-    elif password != confirm_password:
-        return jsonify({'message': 'Password tidak cocok!'}), 400
-    else:
-        otp = random.randint(100000, 999999)
-        otp_expiry = datetime.now() + timedelta(seconds=90)
+        if User.query.filter_by(email=email).first():
+            return jsonify({'message': 'Email sudah terdaftar!'}), 400
+        elif password != confirm_password:
+            return jsonify({'message': 'Password tidak cocok!'}), 400
+        else:
+            otp = random.randint(100000, 999999)
+            otp_expiry = datetime.now() + timedelta(seconds=90)
 
-        # Set role ke 'public' secara default
-        new_user = User(
-            nama_user=nama_user,
-            email=email,
-            role='public',
-            password_hash=generate_password_hash(password),
-            is_verified=False,
-            otp=otp,
-            otp_expiry=otp_expiry
-        )
+            # Set role ke 'public' secara default
+            new_user = User(
+                nama_user=nama_user,
+                email=email,
+                role='public',
+                password_hash=generate_password_hash(password),
+                is_verified=False,
+                otp=otp,
+                otp_expiry=otp_expiry
+            )
 
-        db.session.add(new_user)
-        db.session.commit()
+            db.session.add(new_user)
+            db.session.commit()
 
-        subject = "Verifikasi Akun Anda"
-        body = f"<p>Kode OTP Anda: <b>{otp}</b>. Berlaku selama 1 menit 30 detik.</p>"
-        send_email(subject, body, email)
+            subject = "Verifikasi Akun Anda"
+            body = f"<p>Kode OTP Anda: <b>{otp}</b>. Berlaku selama 1 menit 30 detik.</p>"
+            send_email(subject, body, email)
 
-        return jsonify({'message': 'OTP telah dikirim ke email Anda.'}), 200
+            return jsonify({'message': 'OTP telah dikirim ke email Anda.'}), 200
+    except Exception as e:
+        # Tangani error dan log error untuk debugging
+        app.logger.error(f"Error during registration: {e}")
+        return jsonify({'message': 'Terjadi kesalahan di server.'}), 500
+
 
 
 # Endpoint untuk mendapatkan token baru menggunakan refresh token

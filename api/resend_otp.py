@@ -18,7 +18,7 @@ EMAIL_ADDRESS = os.getenv("EMAIL_ADDRESS")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
 # Blueprint untuk API Resend Email
-resend_email_blueprint = Blueprint('resend_email', __name__, url_prefix='/api/resend')
+resend_otp_blueprint = Blueprint('resend_email', __name__, url_prefix='/api/resend')
 
 # Fungsi Kirim Email
 def send_email(subject, body, recipient_email):
