@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, jsonify, redirect, url_for, flash, session
-from models.models import User
+from models.user import User
 from app import db
 from datetime import datetime, timedelta
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -98,4 +98,3 @@ def change_password():
 
     flash('Password berhasil diubah.', 'success')
     return redirect(url_for('admin.settings'))
-

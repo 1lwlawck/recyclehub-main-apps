@@ -1,13 +1,18 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask , session
+from flask_sqlalchemy import SQLAlchemy 
 from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
-import os 
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
+from flask_session import Session
+from sqlalchemy import text
+import os 
+
 
 # Inisialisasi aplikasi Flask
 app = Flask(__name__)
+app.config['SESSION_TYPE'] = 'filesystem'  # Penyimpanan session di filesystem
+Session(app)
 
 # Load environment variables from .env file
 load_dotenv()
@@ -28,7 +33,7 @@ bcrypt = Bcrypt(app)
 migrate = Migrate(app, db)
 jwt = JWTManager(app)
 
-from sqlalchemy import text
+
 
 # Uji koneksi database
 try:
@@ -51,9 +56,6 @@ from controllers.chatbot_controller import chatbot_blueprint
 
 # Impor blueprint API
 from api.auth_api import auth_api_blueprint 
-from api.resend_otp import resend_otp_blueprint
-from api.forgot_password import password_api_blueprint
-
 
 
 # Registrasi blueprint
@@ -67,8 +69,6 @@ app.register_blueprint(chatbot_blueprint)
 
 # Registrasi blueprint API
 app.register_blueprint(auth_api_blueprint)
-app.register_blueprint(resend_otp_blueprint)
-app.register_blueprint(password_api_blueprint)
 
 
 # Jalankan aplikasi

@@ -83,7 +83,7 @@
         </div>
 
         <!-- Password -->
-        <div>
+        <div class="relative">
           <label for="password" class="block text-sm font-medium text-gray-800"
             >Password</label
           >
@@ -95,10 +95,17 @@
             required
             class="mt-1 block w-full px-3 py-2 border-2 border-black rounded-md text-gray-800 focus:outline-none focus:ring-green-500 focus:border-green-500"
           />
+          <button
+            type="button"
+            onclick="togglePasswordVisibility('password', this)"
+            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 dark:text-gray-400 mt-2"
+          >
+            🙈
+          </button>
         </div>
 
         <!-- Confirm Password -->
-        <div>
+        <div class="relative">
           <label
             for="confirm_password"
             class="block text-sm font-medium text-gray-800"
@@ -112,6 +119,13 @@
             required
             class="mt-1 block w-full px-3 py-2 border-2 border-black rounded-md text-gray-800 focus:outline-none focus:ring-green-500 focus:border-green-500"
           />
+          <button
+            type="button"
+            onclick="togglePasswordVisibility('confirm_password', this)"
+            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 dark:text-gray-400 mt-2"
+          >
+            🙈
+          </button>
         </div>
 
         <!-- Tombol Register -->
@@ -134,3 +148,5 @@
     </div>
   </div>
 </div>
+
+<script src="{{ url_for('static', filename='js/toggle_password_visibility.js') }}"></script>

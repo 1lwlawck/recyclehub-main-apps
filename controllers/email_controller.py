@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, session
-from models.models import User
+from models.user import User
 from app import db
 from datetime import datetime, timedelta
 import random

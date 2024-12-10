@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request ,render_template , session , redirect , url_for
-from models.models import User  # Pastikan import model sesuai struktur Anda
+from models.user import User  # Pastikan import model sesuai struktur Anda
 from app import db, app
 from sqlalchemy.sql import text
 from werkzeug.utils import secure_filename

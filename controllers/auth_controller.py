@@ -1,11 +1,13 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from models.models import User
+from flask import (
+    Blueprint, render_template, request, redirect, url_for, flash, session, current_app
+)
+from models.user import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db , app
 from datetime import datetime, timedelta
 from controllers.email_controller import send_email
 import random
-from flask import make_response
+from flask import make_response  , url_for
 
 
 auth_blueprint = Blueprint('auth', __name__, url_prefix='/auth')
@@ -15,7 +17,7 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email').strip()
         password = request.form.get('password')
-        remember = request.form.get('remember')  # Mendapatkan nilai dari checkbox
+        remember = request.form.get('remember')  
 
         # Validasi input
         if not email or not password:
@@ -28,8 +30,8 @@ def login():
         if user:
             # Cek apakah role user adalah 'public'
             if user.role == 'public':
-                flash('Anda tidak dapat mengakses halaman ini.', 'warning')
-                return redirect(url_for('auth.login'))
+                flash('Anda harus login melalui aplikasi mobile.', 'warning')
+                return redirect(url_for('auth.login'))  # Tetap di halaman login
 
             # Cek apakah akun sudah diverifikasi
             if not user.is_verified:
@@ -39,12 +41,20 @@ def login():
 
             # Validasi password
             if check_password_hash(user.password_hash, password):
+                # Buat URL untuk avatar
+                avatar_url = (
+                    url_for('static', filename=f'uploads/avatars/{user.avatar}', _external=True)
+                    if user.avatar else
+                    url_for('static', filename='uploads/avatars/default-avatar.png', _external=True)
+                )
+
                 # Simpan data session user
                 session['user'] = {
                     'id': user.id,
                     'nama_user': user.nama_user,
                     'email': user.email,
                     'role': user.role,
+                    'avatar': avatar_url,  # Tambahkan URL avatar ke session
                 }
 
                 # Jika "Ingat Saya" tidak dicentang, jadikan session sementara
@@ -52,10 +62,10 @@ def login():
                     session.permanent = False  # Session akan berakhir saat browser ditutup
                 else:
                     session.permanent = True  # Session akan bertahan
-                    app.permanent_session_lifetime = timedelta(days=30)  # Misal, 30 hari
+                    current_app.permanent_session_lifetime = timedelta(days=30)  # Misal, 30 hari
 
                 # Redirect berdasarkan role
-                return redirect(url_for('admin.dashboard' if user.role in ['admin', 'superadmin'] else 'public.home'))
+                return redirect(url_for('admin.dashboard' if user.role in ['admin', 'superadmin'] else 'auth.login'))
             else:
                 flash('Password salah!', 'danger')
         else:

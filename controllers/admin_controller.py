@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, flash, abort, jsonify, session, redirect, url_for
 from utils import login_required, role_required
-from models.models import User, db 
+from models.user import User, db 
 from time import time
 import os
 from app import app

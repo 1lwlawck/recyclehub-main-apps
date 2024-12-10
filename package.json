@@ -10,6 +10,7 @@
     "aos": "^2.3.4",
     "apexcharts": "^4.1.0",
     "flowbite": "^2.5.2",
-    "flowbite-typography": "^1.0.4"
+    "flowbite-typography": "^1.0.4",
+    "smtp-client": "^0.4.0"
   }
 }
