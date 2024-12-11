@@ -6,15 +6,15 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from controllers.email_controller import send_email
 import random
 from utils import login_required , role_required
-
-
+from modules.forms import ForgotPasswordForm , ResetPasswordForm  # Import form
 
 password_blueprint = Blueprint('password', __name__, url_prefix='/password')
 
 @password_blueprint.route('/forgot-password', methods=['GET', 'POST'])
 def forgot_password():
-    if request.method == 'POST':
-        email = request.form.get('email').strip()
+    form = ForgotPasswordForm()
+    if form.validate_on_submit():
+        email = form.email.data.strip()
         user = User.query.filter_by(email=email).first()
 
         if not user:
@@ -34,7 +34,8 @@ def forgot_password():
             flash('Email reset password telah dikirim.', 'info')
             return redirect(url_for('auth.login'))
 
-    return render_template('page/input-email-page.html')
+    return render_template('page/input-email-page.html', form=form)
+
 
 @password_blueprint.route('/reset-password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
@@ -44,14 +45,10 @@ def reset_password(token):
         flash('Token tidak valid atau telah kedaluwarsa.', 'danger')
         return redirect(url_for('password.forgot_password'))
 
-    if request.method == 'POST':
-        new_password = request.form['new_password']
-        confirm_password = request.form['confirm_password']
+    form = ResetPasswordForm()
 
-        if not new_password or new_password != confirm_password:
-            flash('Password tidak cocok atau kosong.', 'danger')
-            return redirect(url_for('password.reset_password', token=token))
-
+    if form.validate_on_submit():
+        new_password = form.new_password.data
         user.password_hash = generate_password_hash(new_password)
         user.reset_token = None
         user.reset_token_expiry = None
@@ -60,7 +57,7 @@ def reset_password(token):
         flash('Password berhasil direset.', 'success')
         return redirect(url_for('auth.login'))
 
-    return render_template('page/reset-password-page.html', token=token)
+    return render_template('page/reset-password-page.html', form=form)
 
 
 @password_blueprint.route('/change-password', methods=['POST'])

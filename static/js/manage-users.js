@@ -17,20 +17,13 @@ function fetchUsers(page = 1, search = "") {
           // Jika tidak ada data, tampilkan pesan "Data tidak ditemukan"
           const noDataRow = document.createElement("tr");
           noDataRow.innerHTML = `
-            <td colspan="7" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+            <td colspan="8" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
               Data tidak ditemukan
             </td>
           `;
           tableBody.appendChild(noDataRow);
         } else {
           data.users.forEach((user) => {
-            const roleColor =
-              user.role === "superadmin"
-                ? "bg-red-500"
-                : user.role === "admin"
-                ? "bg-green-500"
-                : "bg-yellow-500";
-
             const row = document.createElement("tr");
             row.innerHTML = `
               <td class="px-6 py-4 text-center">${user.id}</td>
@@ -52,7 +45,12 @@ function fetchUsers(page = 1, search = "") {
               <td class="px-6 py-4 text-center">${
                 user.is_verified ? "✔" : "✘"
               }</td>
-              <td class="px-6 py-4 text-center">${user.otp || "-"}</td>
+              
+              <td class="px-6 py-4 text-center" contenteditable="true" data-field="points" data-id="${
+                user.id
+              }">
+                ${user.points}
+              </td>
               <td class="px-6 py-4 text-center">
                 <button class="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-3 py-1 rounded" onclick="showDeleteModal(${
                   user.id
@@ -106,7 +104,9 @@ function updateUser(userId, field, value) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ [field]: value }),
+    body: JSON.stringify({
+      [field]: field === "points" ? parseInt(value) : value,
+    }),
   })
     .then((response) => response.json())
     .then((data) => {

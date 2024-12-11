@@ -56,6 +56,7 @@ from controllers.chatbot_controller import chatbot_blueprint
 
 # Impor blueprint API
 from api.auth_api import auth_api_blueprint 
+from api.get_user_points_api import points_blueprint
 
 
 # Registrasi blueprint
@@ -69,6 +70,7 @@ app.register_blueprint(chatbot_blueprint)
 
 # Registrasi blueprint API
 app.register_blueprint(auth_api_blueprint)
+app.register_blueprint(points_blueprint)
 
 
 # Jalankan aplikasi

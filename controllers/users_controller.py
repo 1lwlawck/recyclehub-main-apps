@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request ,render_template , session , redirect , url_for
 from models.user import User  # Pastikan import model sesuai struktur Anda
+from models.points import Points
 from app import db, app
 from sqlalchemy.sql import text
 from werkzeug.utils import secure_filename
@@ -39,15 +40,19 @@ def get_users():
         # Hitung total data (termasuk hasil filter)
         total_users = query.count()
 
-        # Format data
-        users_list = [{
-            "id": user.id,
-            "nama_user": user.nama_user,
-            "email": user.email,
-            "role": user.role,
-            "is_verified": user.is_verified,
-            "otp": user.otp
-        } for user in users]
+        # Format data dengan menyertakan points
+        users_list = []
+        for user in users:
+            user_points = Points.query.filter_by(user_id=user.id).first()
+            users_list.append({
+                "id": user.id,
+                "nama_user": user.nama_user,
+                "email": user.email,
+                "role": user.role,
+                "is_verified": user.is_verified,
+                "otp": user.otp,
+                "points": user_points.points if user_points else 0  # Sertakan points
+            })
 
         return jsonify({
             'success': True,
@@ -59,6 +64,7 @@ def get_users():
 
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500
+
 
 
 @user_blueprint.route('/delete/<int:user_id>', methods=['DELETE'])
@@ -107,36 +113,33 @@ def update_user(user_id):
         if 'email' in data and not data['email'].strip():
             return jsonify({'success': False, 'message': 'Email tidak boleh kosong'}), 400
 
-        # Ambil user berdasarkan ID atau session
-        if user_id == 0:
-            user = User.query.filter_by(email=session['user']['email']).first()
-        else:
-            user = User.query.get(user_id)
-
+        # Ambil user berdasarkan ID
+        user = User.query.get(user_id)
         if not user:
             return jsonify({'success': False, 'message': 'User tidak ditemukan'}), 404
 
-        # Update field yang diizinkan
+        # Update field user
         allowed_fields = ['nama_user', 'email']
         for field, value in data.items():
             if field in allowed_fields:
                 setattr(user, field, value)
 
-        db.session.commit()
+        # Update points jika ada
+        if 'points' in data:
+            user_points = Points.query.filter_by(user_id=user.id).first()
+            if user_points:
+                user_points.points = int(data['points'])
+            else:
+                # Jika user belum memiliki entry points, buat yang baru
+                new_points = Points(user_id=user.id, points=int(data['points']))
+                db.session.add(new_points)
 
-        # Perbarui session jika user yang sedang login diperbarui
-        if user_id == 0:
-            session['user'] = {
-                "id": user.id,
-                "nama_user": user.nama_user,
-                "email": user.email,
-                "role": user.role,
-                "avaatar": user.avatar or 'default-avatar.png'
-            }
+        db.session.commit()
 
         return jsonify({'success': True, 'message': 'User berhasil diperbarui'})
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500
+
 
 
 # Fungsi validasi ekstensi file

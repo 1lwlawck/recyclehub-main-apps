@@ -1,28 +1,26 @@
 from flask import (
-    Blueprint, render_template, request, redirect, url_for, flash, session, current_app
+    Blueprint, render_template, redirect, url_for, flash, session, current_app
 )
+from modules.forms import LoginForm , RegistrationForm , OTPForm # Import dari modules
 from models.user import User
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from app import db , app
-from datetime import datetime, timedelta
+from datetime import datetime , timedelta 
+from flask import request , make_response 
 from controllers.email_controller import send_email
 import random
-from flask import make_response  , url_for
 
 
 auth_blueprint = Blueprint('auth', __name__, url_prefix='/auth')
 
 @auth_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        email = request.form.get('email').strip()
-        password = request.form.get('password')
-        remember = request.form.get('remember')  
+    form = LoginForm()
 
-        # Validasi input
-        if not email or not password:
-            flash('Email dan password tidak boleh kosong.', 'danger')
-            return redirect(url_for('auth.login'))
+    if form.validate_on_submit():  # Validasi form setelah submit
+        email = form.email.data.strip()
+        password = form.password.data
+        remember = form.remember.data
 
         # Ambil user berdasarkan email
         user = User.query.filter_by(email=email).first()
@@ -31,7 +29,7 @@ def login():
             # Cek apakah role user adalah 'public'
             if user.role == 'public':
                 flash('Anda harus login melalui aplikasi mobile.', 'warning')
-                return redirect(url_for('auth.login'))  # Tetap di halaman login
+                return redirect(url_for('auth.login'))
 
             # Cek apakah akun sudah diverifikasi
             if not user.is_verified:
@@ -41,37 +39,34 @@ def login():
 
             # Validasi password
             if check_password_hash(user.password_hash, password):
-                # Buat URL untuk avatar
                 avatar_url = (
                     url_for('static', filename=f'uploads/avatars/{user.avatar}', _external=True)
                     if user.avatar else
                     url_for('static', filename='uploads/avatars/default-avatar.png', _external=True)
                 )
 
-                # Simpan data session user
                 session['user'] = {
                     'id': user.id,
                     'nama_user': user.nama_user,
                     'email': user.email,
                     'role': user.role,
-                    'avatar': avatar_url,  # Tambahkan URL avatar ke session
+                    'avatar': avatar_url,
                 }
 
-                # Jika "Ingat Saya" tidak dicentang, jadikan session sementara
                 if not remember:
-                    session.permanent = False  # Session akan berakhir saat browser ditutup
+                    session.permanent = False
                 else:
-                    session.permanent = True  # Session akan bertahan
-                    current_app.permanent_session_lifetime = timedelta(days=30)  # Misal, 30 hari
+                    session.permanent = True
+                    current_app.permanent_session_lifetime = timedelta(days=30)
 
-                # Redirect berdasarkan role
                 return redirect(url_for('admin.dashboard' if user.role in ['admin', 'superadmin'] else 'auth.login'))
             else:
                 flash('Password salah!', 'danger')
         else:
             flash('Email tidak terdaftar.', 'danger')
 
-    return render_template('page/login-page.html')
+    return render_template('page/login-page.html', form=form)
+
 
 @auth_blueprint.before_app_request
 def check_remember_me():
@@ -95,26 +90,16 @@ def check_remember_me():
 
 @auth_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
-    if request.method == 'POST':
-        nama_user = request.form['nama_user']
-        email = request.form['email']
-        password = request.form['password']
-        confirm_password = request.form['confirm_password']
+    form = RegistrationForm()
 
-        # Validasi panjang password
-        if len(password) < 8:
-            flash('Password harus memiliki minimal 8 karakter!', 'danger')
-            return redirect(url_for('auth.register'))
+    if form.validate_on_submit():
+        nama_user = form.nama_user.data
+        email = form.email.data
+        password = form.password.data
 
-        # Validasi email format
-        if '@' not in email or '.' not in email.split('@')[-1]:
-            flash('Format email tidak valid!', 'danger')
-            return redirect(url_for('auth.register'))
-
+        # Cek apakah email sudah terdaftar
         if User.query.filter_by(email=email).first():
             flash('Email sudah terdaftar!', 'danger')
-        elif password != confirm_password:
-            flash('Password tidak cocok!', 'danger')
         else:
             otp = random.randint(100000, 999999)
             otp_expiry = datetime.now() + timedelta(seconds=90)
@@ -138,12 +123,14 @@ def register():
             flash('OTP telah dikirim ke email Anda.', 'info')
             return redirect(url_for('auth.verify_email'))
 
-    return render_template('page/register-page.html')
+    return render_template('page/register-page.html', form=form)
 
 
 @auth_blueprint.route('/verify-email', methods=['GET', 'POST'])
 def verify_email():
+    form = OTPForm()
     email_to_verify = session.get('email_to_verify')
+
     if not email_to_verify:
         flash('Tidak ada email yang diverifikasi.', 'danger')
         return redirect(url_for('auth.login'))
@@ -153,12 +140,27 @@ def verify_email():
         flash('Pengguna tidak ditemukan.', 'danger')
         return redirect(url_for('auth.login'))
 
-    if request.method == 'POST':
-        otp_input = request.form['otp']
-        if not otp_input.isdigit():
-            flash('Kode OTP hanya boleh berisi angka.', 'danger')
-            return redirect(url_for('auth.verify_email'))
+    # Logika untuk tombol 'Kirim Ulang'
+    if form.resend.data:
+        if user.otp_expiry and user.otp_expiry > datetime.now():
+            remaining_time = int((user.otp_expiry - datetime.now()).total_seconds())
+            flash(f'Kode OTP masih aktif. Tunggu {remaining_time} detik.', 'warning')
+        else:
+            otp = random.randint(100000, 999999)
+            user.otp = otp
+            user.otp_expiry = datetime.now() + timedelta(seconds=90)
+            db.session.commit()
 
+            subject = "Kode OTP Baru Anda"
+            body = f"<p>Kode OTP baru Anda adalah <b>{otp}</b>. Berlaku selama 1 menit 30 detik.</p>"
+            send_email(subject, body, user.email)
+            flash('Kode OTP baru telah dikirim ke email Anda.', 'success')
+
+        return redirect(url_for('auth.verify_email'))
+
+    # Logika untuk validasi OTP
+    if form.validate_on_submit() and form.submit.data:
+        otp_input = form.otp.data
         if user.otp != int(otp_input) or user.otp_expiry < datetime.now():
             flash('Kode OTP tidak valid atau telah kedaluwarsa.', 'danger')
             return redirect(url_for('auth.verify_email'))
@@ -167,7 +169,7 @@ def verify_email():
         user.otp = None
         user.otp_expiry = None
         db.session.commit()
-        session.pop('flash_verify_email', None)
+
         flash('Akun Anda berhasil diverifikasi!', 'success')
         return redirect(url_for('auth.login'))
 
@@ -175,7 +177,9 @@ def verify_email():
         max(0, int((user.otp_expiry - datetime.now()).total_seconds()))
         if user and user.otp_expiry else 0
     )
-    return render_template('page/verify-email-page.html', remaining_time=remaining_time)
+
+    return render_template('page/verify-email-page.html', form=form, remaining_time=remaining_time)
+
 
 @auth_blueprint.route('/logout', methods=['GET', 'POST'])
 def logout():

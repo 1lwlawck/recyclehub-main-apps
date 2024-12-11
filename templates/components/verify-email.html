@@ -27,25 +27,21 @@
 
       <!-- OTP Form -->
       <form method="POST" class="mt-6 space-y-4" id="otp-form">
+        {{ form.hidden_tag() }}
+
         <div>
-          <label for="otp" class="block text-sm font-medium text-gray-800"
-            >Kode OTP</label
-          >
-          <input
-            type="text"
-            name="otp"
-            id="otp"
-            placeholder="Masukkan kode OTP"
-            required
-            class="mt-1 block w-full px-3 py-2 border-2 border-black rounded-md text-gray-800 focus:outline-none focus:ring-green-500 focus:border-green-500"
-          />
+          {{ form.otp.label(class="block text-sm font-medium text-gray-800") }}
+          {{ form.otp( class="mt-1 block w-full px-3 py-2 border-2 border-black
+          rounded-md text-gray-800 focus:outline-none focus:ring-green-500
+          focus:border-green-500" ) }} {% for error in form.otp.errors %}
+          <span class="text-red-500 text-xs">{{ error }}</span>
+          {% endfor %}
         </div>
-        <button
-          type="submit"
-          class="w-full py-2 px-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-md border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] transition-transform transform hover:scale-105"
-        >
-          Verifikasi
-        </button>
+
+        {{ form.submit( class="w-full py-2 px-4 bg-green-600 hover:bg-green-700
+        text-white font-bold rounded-md border-2 border-black
+        shadow-[4px_4px_0px_rgba(0,0,0,1)] transition-transform transform
+        hover:scale-105" ) }}
       </form>
 
       <!-- Timer & Resend -->
@@ -63,7 +59,6 @@
         </span>
         <button
           id="resend-btn"
-          disabled
           class="text-green-600 font-bold hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Kirim Ulang
@@ -74,13 +69,12 @@
 </div>
 
 <script>
-  let remainingTime = {{ remaining_time }}; // Waktu kedaluwarsa OTP dari server
+  let remainingTime = {{ remaining_time }};
   const timerElement = document.getElementById("remaining-time");
   const timerLabel = document.getElementById("timer-label");
   const resendButton = document.getElementById("resend-btn");
   let timerInterval;
 
-  // Fungsi untuk memperbarui timer
   function updateTimer() {
     if (remainingTime > 0) {
       const minutes = Math.floor(remainingTime / 60);
@@ -101,16 +95,14 @@
     }
   }
 
-  // Mulai atau restart timer
   function startTimer() {
     clearInterval(timerInterval);
     timerLabel.textContent = "Kode kedaluwarsa dalam";
     timerInterval = setInterval(updateTimer, 1000);
   }
 
-  // Fungsi untuk mengirim ulang OTP
   function resendOTP() {
-    if (resendButton.disabled) return; // Mencegah pengiriman ulang jika tombol masih nonaktif
+    if (resendButton.disabled) return;
 
     resendButton.disabled = true;
     resendButton.classList.add(
@@ -122,12 +114,15 @@
       method: "POST",
       headers: { "Content-Type": "application/json" },
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) throw new Error(response.statusText);
+        return response.json();
+      })
       .then((data) => {
         if (data.success) {
           showFlashMessage("Kode OTP baru telah dikirim.", "success");
-          remainingTime = data.remaining_time; // Reset timer dengan waktu baru
-          startTimer(); // Mulai ulang timer
+          remainingTime = data.remaining_time;
+          startTimer();
         } else {
           showFlashMessage(data.message || "Gagal mengirim ulang OTP.", "danger");
         }
@@ -138,7 +133,6 @@
       });
   }
 
-  // Fungsi untuk menampilkan flash message
   function showFlashMessage(message, category) {
     const flashMessages = document.getElementById("flash-messages");
     const flashDiv = document.createElement("div");
@@ -152,12 +146,13 @@
       flashDiv.style.transition = "opacity 0.5s ease-out";
       flashDiv.style.opacity = "0";
       setTimeout(() => flashDiv.remove(), 500);
-    }, 5000); // Tampilkan flash message selama 5 detik
+    }, 5000);
   }
 
-  // Listener untuk tombol resend
-  resendButton.addEventListener("click", resendOTP);
+  resendButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    resendOTP();
+  });
 
-  // Mulai timer awal saat halaman dimuat
   startTimer();
 </script>

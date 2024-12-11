@@ -16,16 +16,6 @@
     <!-- Bagian kanan dengan form -->
     <div class="w-full md:w-1/2 p-6 md:p-8">
       <div class="flex items-center">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6 text-green-600 mr-2"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            d="M12 2C6.486 2 2 6.486 2 12c0 5.514 4.486 10 10 10s10-4.486 10-10c0-5.514-4.486-10-10-10zm-1 15v-4h2v4h-2zm0-6V7h2v4h-2z"
-          />
-        </svg>
         <h2 class="text-2xl font-bold text-gray-800">Buat Akun</h2>
       </div>
       <p class="text-gray-600 mb-4 text-sm">
@@ -37,11 +27,9 @@
         >
       </p>
 
-      <form
-        action="{{ url_for('auth.register') }}"
-        method="POST"
-        class="space-y-4"
-      >
+      <form method="POST" class="space-y-4">
+        {{ form.hidden_tag() }}
+
         <!-- Flash Messages -->
         {% with messages = get_flashed_messages(with_categories=true) %} {% for
         category, message in messages %}
@@ -54,47 +42,33 @@
 
         <!-- Nama User -->
         <div>
-          <label for="nama_user" class="block text-sm font-medium text-gray-800"
-            >Nama Lengkap</label
-          >
-          <input
-            type="text"
-            id="nama_user"
-            name="nama_user"
-            placeholder="Nama Lengkap Anda"
-            required
-            class="mt-1 block w-full px-3 py-2 border-2 border-black rounded-md text-gray-800 focus:outline-none focus:ring-green-500 focus:border-green-500"
-          />
+          {{ form.nama_user.label(class="block text-sm font-medium
+          text-gray-800") }} {{ form.nama_user( class="mt-1 block w-full px-4
+          py-2 bg-gray-100 border-2 border-black rounded-md text-gray-800
+          shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:ring-2 focus:ring-green-400
+          focus:outline-none" ) }} {% for error in form.nama_user.errors %}
+          <span class="text-red-500 text-xs">{{ error }}</span>
+          {% endfor %}
         </div>
 
         <!-- Email -->
         <div>
-          <label for="email" class="block text-sm font-medium text-gray-800"
-            >Email</label
-          >
-          <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="banksampah@gmail.com"
-            required
-            class="mt-1 block w-full px-3 py-2 border-2 border-black rounded-md text-gray-800 focus:outline-none focus:ring-green-500 focus:border-green-500"
-          />
+          {{ form.email.label(class="block text-sm font-medium text-gray-800")
+          }} {{ form.email( class="mt-1 block w-full px-4 py-2 bg-gray-100
+          border-2 border-black rounded-md text-gray-800
+          shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:ring-2 focus:ring-green-400
+          focus:outline-none" ) }} {% for error in form.email.errors %}
+          <span class="text-red-500 text-xs">{{ error }}</span>
+          {% endfor %}
         </div>
 
         <!-- Password -->
         <div class="relative">
-          <label for="password" class="block text-sm font-medium text-gray-800"
-            >Password</label
-          >
-          <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="••••••••"
-            required
-            class="mt-1 block w-full px-3 py-2 border-2 border-black rounded-md text-gray-800 focus:outline-none focus:ring-green-500 focus:border-green-500"
-          />
+          {{ form.password.label(class="block text-sm font-medium
+          text-gray-800") }} {{ form.password( class="mt-1 block w-full px-4
+          py-2 bg-gray-100 border-2 border-black rounded-md text-gray-800
+          shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:ring-2 focus:ring-green-400
+          focus:outline-none" ) }}
           <button
             type="button"
             onclick="togglePasswordVisibility('password', this)"
@@ -102,23 +76,18 @@
           >
             🙈
           </button>
+          {% for error in form.password.errors %}
+          <span class="text-red-500 text-xs">{{ error }}</span>
+          {% endfor %}
         </div>
 
         <!-- Confirm Password -->
         <div class="relative">
-          <label
-            for="confirm_password"
-            class="block text-sm font-medium text-gray-800"
-            >Konfirmasi Password</label
-          >
-          <input
-            type="password"
-            id="confirm_password"
-            name="confirm_password"
-            placeholder="••••••••"
-            required
-            class="mt-1 block w-full px-3 py-2 border-2 border-black rounded-md text-gray-800 focus:outline-none focus:ring-green-500 focus:border-green-500"
-          />
+          {{ form.confirm_password.label(class="block text-sm font-medium
+          text-gray-800") }} {{ form.confirm_password( class="mt-1 block w-full
+          px-4 py-2 bg-gray-100 border-2 border-black rounded-md text-gray-800
+          shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:ring-2 focus:ring-green-400
+          focus:outline-none" ) }}
           <button
             type="button"
             onclick="togglePasswordVisibility('confirm_password', this)"
@@ -126,15 +95,16 @@
           >
             🙈
           </button>
+          {% for error in form.confirm_password.errors %}
+          <span class="text-red-500 text-xs">{{ error }}</span>
+          {% endfor %}
         </div>
 
         <!-- Tombol Register -->
-        <button
-          type="submit"
-          class="w-full py-2 px-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-md border-2 border-black shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-transform transform hover:scale-105"
-        >
-          Buat Akun Anda
-        </button>
+        {{ form.submit( class="w-full py-2 px-4 bg-green-600 hover:bg-green-700
+        text-white font-bold rounded-md border-2 border-black
+        shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-transform transform
+        hover:scale-105" ) }}
 
         <div class="flex items-center justify-center space-x-4 mt-4">
           <span class="text-gray-400 font-semibold">Atau</span>
@@ -142,7 +112,7 @@
 
         <!-- Tombol Google -->
         <div class="flex items-center justify-center">
-          {% include 'components/btn-google.html' %}
+          {%include 'components/btn-google.html'%}
         </div>
       </form>
     </div>
