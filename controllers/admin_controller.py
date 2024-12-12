@@ -8,6 +8,7 @@ from app import app
 # Membuat Blueprint untuk Admin
 admin_blueprint = Blueprint('admin', __name__, url_prefix='/admin')
 
+
 # Halaman Dashboard
 @admin_blueprint.route('/dashboard')
 @login_required
@@ -16,6 +17,7 @@ def dashboard():
     try:
         # Tambahkan logika jika diperlukan, misalnya statistik
         return render_template('admin/dashboard-admin.html' , time=time)
+        print("Session Avatar:", session['user']['avatar'])
     except Exception as e:
         flash('Terjadi kesalahan saat memuat halaman dashboard.', 'danger')
         return jsonify({'message': 'Error loading dashboard', 'error': str(e)}), 500
@@ -55,6 +57,18 @@ def message():
     except Exception as e:
         flash('Terjadi kesalahan saat memuat halaman pesan.', 'danger')
         return jsonify({'message': 'Error loading messages', 'error': str(e)}), 500
+
+@admin_blueprint.route('/sentiment')
+@login_required
+@role_required(['superadmin'])
+def sentiment_analysis():
+    try:
+        # Tambahkan logika jika diperlukan, misalnya data pesan
+        return render_template('admin/sentiment-analysis.html' , time=time)
+    except Exception as e:
+        flash('Terjadi kesalahan saat memuat halaman sentiment.', 'danger')
+        return jsonify({'message': 'Error loading sentiment', 'error': str(e)}), 500
+
 
 # Halaman Manage User (Hanya untuk superadmin)
 @admin_blueprint.route('/manage-user')

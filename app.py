@@ -34,7 +34,6 @@ migrate = Migrate(app, db)
 jwt = JWTManager(app)
 
 
-
 # Uji koneksi database
 try:
     with app.app_context():
@@ -54,9 +53,11 @@ from controllers.password_controller import password_blueprint
 from controllers.users_controller import user_blueprint
 from controllers.chatbot_controller import chatbot_blueprint
 
+
 # Impor blueprint API
 from api.auth_api import auth_api_blueprint 
 from api.get_user_points_api import points_blueprint
+from api.sentiment_api import sentiment_bp
 
 
 # Registrasi blueprint
@@ -68,11 +69,23 @@ app.register_blueprint(password_blueprint, url_prefix='/password')
 app.register_blueprint(user_blueprint)
 app.register_blueprint(chatbot_blueprint)
 
+
 # Registrasi blueprint API
 app.register_blueprint(auth_api_blueprint)
 app.register_blueprint(points_blueprint)
+app.register_blueprint(sentiment_bp, url_prefix='/api/sentiment')
 
+from models.user import User
+
+DEFAULT_AVATAR = 'default-avatar.png'
+
+@app.before_request
+def ensure_avatar_in_session():
+    if 'user' in session:
+        user = User.query.get(session['user']['id'])
+        if user:
+            session['user']['avatar'] = user.avatar if user.avatar else DEFAULT_AVATAR
 
 # Jalankan aplikasi
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0' , port=5000 , debug=True)

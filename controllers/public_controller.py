@@ -22,3 +22,7 @@ def contact():
 def logout():
     session.clear()
     return redirect(url_for('public.home'))
+
+@public_blueprint.route('/feedback')
+def feedback():
+    return render_template('page/feedback-page.html')

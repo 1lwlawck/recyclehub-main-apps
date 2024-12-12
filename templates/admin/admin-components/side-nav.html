@@ -210,6 +210,40 @@
         {% endif %}
       </li>
 
+      <li>
+        {% if session['user']['role'] == 'superadmin' %}
+        <a
+          href="{{ url_for('admin.sentiment_analysis') }}"
+          class="flex items-center p-4 bg-yellow-100 border-4 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] rounded-md hover:scale-105 transition-transform dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600"
+        >
+          <!-- New Icon: Bar Chart -->
+          <svg
+            class="w-6 h-6 text-black dark:text-white"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M3 3a1 1 0 011 1v14h16V4a1 1 0 112 0v14a2 2 0 01-2 2H4a2 2 0 01-2-2V4a1 1 0 011-1z"
+              clip-rule="evenodd"
+            />
+            <path
+              d="M7 10a1 1 0 011-1h1a1 1 0 011 1v7a1 1 0 01-1 1H8a1 1 0 01-1-1v-7zm5-4a1 1 0 011-1h1a1 1 0 011 1v11a1 1 0 01-1 1h-1a1 1 0 01-1-1V6zm5 6a1 1 0 011-1h1a1 1 0 011 1v5a1 1 0 01-1 1h-1a1 1 0 01-1-1v-5z"
+            />
+          </svg>
+          <span class="ml-4 font-bold text-black dark:text-white"
+            >Sentiment Analysis</span
+          >
+          <span
+            class="inline-flex items-center justify-center w-6 h-6 bg-red-500 text-white font-bold text-xs rounded-full ml-auto dark:bg-red-400"
+          >
+            SA
+          </span>
+        </a>
+        {% endif %}
+      </li>
+
       <!-- Drop Off -->
       <li>
         <a
@@ -284,8 +318,6 @@
           </span>
         </a>
       </li>
-
-      <!-- Manage User -->
 
       <!-- Log Out -->
       <li>

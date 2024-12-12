@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request ,render_template , session , redirect , url_for
-from models.user import User  # Pastikan import model sesuai struktur Anda
+from models.user import User 
 from models.points import Points
 from app import db, app
 from sqlalchemy.sql import text
@@ -13,7 +13,6 @@ user_blueprint = Blueprint('user', __name__, url_prefix='/user')
 UPLOAD_FOLDER = os.path.join(app.root_path, 'static/uploads/avatars')
 DEFAULT_AVATAR = 'default-avatar.png'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @user_blueprint.route('/get-users', methods=['GET'])
@@ -64,7 +63,6 @@ def get_users():
 
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500
-
 
 
 @user_blueprint.route('/delete/<int:user_id>', methods=['DELETE'])
@@ -141,7 +139,6 @@ def update_user(user_id):
         return jsonify({'success': False, 'message': str(e)}), 500
 
 
-
 # Fungsi validasi ekstensi file
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -149,6 +146,9 @@ def allowed_file(filename):
 # Upload avatar
 @user_blueprint.route('/upload-avatar', methods=['POST'])
 def upload_avatar():
+    if 'user' not in session:
+        return jsonify({'success': False, 'message': 'Anda harus login untuk mengunggah avatar'}), 403
+
     if 'file' not in request.files:
         return jsonify({'success': False, 'message': 'Tidak ada file yang diunggah'}), 400
 
@@ -159,8 +159,13 @@ def upload_avatar():
 
     if file and allowed_file(file.filename):
         try:
-            # Amankan nama file
+            # Pastikan folder upload ada
+            if not os.path.exists(app.config['UPLOAD_FOLDER']):
+                os.makedirs(app.config['UPLOAD_FOLDER'])
+
+            # Amankan nama file dan tambahkan timestamp
             filename = secure_filename(file.filename)
+            filename = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{filename}"
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
             # Ambil user dari session
@@ -179,18 +184,17 @@ def upload_avatar():
             user.avatar = filename  # Update nama file avatar di database
             db.session.commit()
 
-            # **Perbarui session**
-            session['user']['avatar'] = user.avatar  # Update avatar di session
+            # Perbarui session
+            session['user']['avatar'] = user.avatar if user.avatar else DEFAULT_AVATAR
 
             # Kirim URL avatar baru
             avatar_url = url_for('static', filename=f'uploads/avatars/{filename}')
             return jsonify({'success': True, 'message': 'Avatar berhasil diperbarui', 'avatar_url': avatar_url})
 
         except Exception as e:
-            return jsonify({'success': False, 'message': str(e)}), 500
+            return jsonify({'success': False, 'message': f"Terjadi kesalahan: {str(e)}"}), 500
     else:
         return jsonify({'success': False, 'message': 'Tipe file tidak diperbolehkan'}), 400
-
 
 
 # Reset avatar ke default
