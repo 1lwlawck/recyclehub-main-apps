@@ -9,7 +9,7 @@ from sqlalchemy import func
 sentiment_bp = Blueprint('sentiment', __name__ , url_prefix='/api/sentiment')
 
 # Load model dan tokenizer
-model_path = '"D:\sentiment_analysis"'
+model_path = 'D:\sentiment_analysis'
 tokenizer = BertTokenizer.from_pretrained(model_path)
 model = BertForSequenceClassification.from_pretrained(model_path)
 

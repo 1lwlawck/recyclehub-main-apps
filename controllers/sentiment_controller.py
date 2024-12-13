@@ -4,7 +4,7 @@ from models import db
 from models.review import Review
 
 # Load model dan tokenizer
-model_path = '"D:\sentiment_analysis"'
+model_path = 'D:\sentiment_analysis'
 tokenizer = BertTokenizer.from_pretrained(model_path)
 model = BertForSequenceClassification.from_pretrained(model_path)
 
