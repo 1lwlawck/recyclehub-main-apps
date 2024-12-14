@@ -1,52 +1,59 @@
-// Fungsi untuk menyesuaikan padding berdasarkan tinggi navbar (jika ada)
-function adjustPadding() {
-  const mainContainer = document.getElementById("main-container");
-  const navbar = document.querySelector("nav"); // Pastikan ada elemen <nav> jika digunakan
-
-  if (navbar) {
-    // Dapatkan tinggi navbar
-    const navbarHeight = navbar.offsetHeight;
-
-    // Atur padding-top kontainer agar tidak tertutup navbar
-    mainContainer.style.paddingTop = `${navbarHeight + 16}px`; // Tambahkan margin ekstra jika diperlukan
+// Fungsi untuk menampilkan modal
+function showThankYouModal() {
+  const modal = document.getElementById("thank-you-modal");
+  if (modal) {
+    modal.classList.remove("hidden");
   }
 }
 
-// Panggil fungsi saat halaman dimuat
-document.addEventListener("DOMContentLoaded", function () {
-  adjustPadding();
-});
+// Fungsi untuk menutup modal
+function hideThankYouModal() {
+  const modal = document.getElementById("thank-you-modal");
+  if (modal) {
+    modal.classList.add("hidden");
+  }
+}
 
-// Event listener untuk menangani resize
-window.addEventListener("resize", adjustPadding);
+// Event listener untuk menutup modal
+document
+  .getElementById("close-modal")
+  .addEventListener("click", hideThankYouModal);
 
 // Event listener untuk form submission
 document.getElementById("review-form").addEventListener("submit", function (e) {
   e.preventDefault();
   const reviewText = document.getElementById("reviewText");
 
+  if (!reviewText.value.trim()) {
+    alert("Harap masukkan ulasan sebelum mengirim!");
+    return;
+  }
+
   fetch("/api/sentiment/analyze", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ text: reviewText.value }),
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
     .then((data) => {
       if (data.error) {
-        alert(data.error);
+        alert(`Error: ${data.error}`);
         return;
       }
 
-      // Tampilkan pesan sukses
-      alert("Review berhasil ditambahkan!");
+      // Tampilkan modal ucapan terima kasih
+      showThankYouModal();
 
       // Reset textarea
       reviewText.value = "";
     })
     .catch((error) => {
       console.error("Error:", error);
-      alert("Something went wrong. Please try again.");
+      alert("Terjadi kesalahan. Silakan coba lagi.");
     });
 });
-
-

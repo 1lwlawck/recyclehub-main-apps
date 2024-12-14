@@ -14,6 +14,7 @@ module.exports = {
         neo: "8px 8px 0px rgba(0,0,0,1)",
         neoHover: "4px 4px 0px rgba(0,0,0,1)",
       },
+
       fontFamily: {
         inconsolata: ["Inconsolata", "monospace"],
       },
