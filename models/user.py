@@ -17,8 +17,6 @@ class User(db.Model):
     reset_token = db.Column(db.String(255), nullable=True)
     reset_token_expiry = db.Column(db.DateTime, nullable=True)
     avatar = db.Column(db.String(255), nullable=True, default="default-avatar.png")
-
-    # Kolom tambahan
     nomor_hp = db.Column(db.String(15), nullable=True)  # Nomor HP
     tanggal_lahir = db.Column(db.Date, nullable=True)  # Tanggal Lahir
     jenis_kelamin = db.Column(db.String(10), nullable=True)  # Jenis Kelamin (Laki-laki/Perempuan)
