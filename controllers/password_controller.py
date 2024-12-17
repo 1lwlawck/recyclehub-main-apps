@@ -70,28 +70,28 @@ def change_password():
 
     # Validasi input
     if not current_password or not new_password or not confirm_password:
-        flash('Semua field wajib diisi.', 'danger')
+        flash('Semua field wajib diisi.', 'change_password_error')
         return redirect(url_for('admin.settings'))
 
     # Ambil user dari session
     user = User.query.filter_by(email=session['user']['email']).first()
     if not user:
-        flash('User tidak ditemukan.', 'danger')
+        flash('User tidak ditemukan.', 'change_password_error')
         return redirect(url_for('admin.settings'))
 
     # Validasi password lama
     if not check_password_hash(user.password_hash, current_password):
-        flash('Password lama salah.', 'danger')
+        flash('Password lama salah.', 'change_password_error')
         return redirect(url_for('admin.settings'))
 
     # Validasi password baru dan konfirmasi
     if new_password != confirm_password:
-        flash('Password baru dan konfirmasi tidak cocok.', 'danger')
+        flash('Password baru dan konfirmasi tidak cocok.', 'change_password_error')
         return redirect(url_for('admin.settings'))
 
     # Update password di database
     user.password_hash = generate_password_hash(new_password)
     db.session.commit()
 
-    flash('Password berhasil diubah.', 'success')
+    flash('Password berhasil diubah.', 'change_password_success')
     return redirect(url_for('admin.settings'))

@@ -11,7 +11,7 @@ import os
 
 # Inisialisasi aplikasi Flask
 app = Flask(__name__)
-app.config['SESSION_TYPE'] = 'filesystem'  # Penyimpanan session di filesystem
+app.config['SESSION_TYPE'] = 'filesystem'  
 Session(app)
 
 # Load environment variables from .env file
@@ -58,6 +58,7 @@ from controllers.chatbot_controller import chatbot_blueprint
 from api.auth_api import auth_api_blueprint 
 from api.get_user_points_api import points_blueprint
 from api.sentiment_api import sentiment_bp
+from api.get_all_users_data import get_all_users_bp
 
 
 # Registrasi blueprint
@@ -74,6 +75,7 @@ app.register_blueprint(chatbot_blueprint)
 app.register_blueprint(auth_api_blueprint)
 app.register_blueprint(points_blueprint)
 app.register_blueprint(sentiment_bp, url_prefix='/api/sentiment')
+app.register_blueprint(get_all_users_bp, url_prefix='/api/users')
 
 from models.user import User
 

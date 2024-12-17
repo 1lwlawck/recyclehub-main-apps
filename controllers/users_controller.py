@@ -1,5 +1,5 @@
-from flask import Blueprint, jsonify, request ,render_template , session , redirect , url_for
-from models.user import User 
+from flask import Blueprint, jsonify, request, session, redirect, url_for, flash
+from models.user import User
 from models.points import Points
 from app import db, app
 from sqlalchemy.sql import text
@@ -15,43 +15,35 @@ DEFAULT_AVATAR = 'default-avatar.png'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+# Fungsi validasi ekstensi file
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+# GET USERS - Ambil daftar user dengan pagination
 @user_blueprint.route('/get-users', methods=['GET'])
 def get_users():
     try:
-        # Ambil parameter
-        page = int(request.args.get('page', 1))  # Halaman saat ini
-        limit = int(request.args.get('limit', 10))  # Jumlah data per halaman
-        search = request.args.get('search', '')  # Input pencarian
+        page = int(request.args.get('page', 1))
+        limit = int(request.args.get('limit', 10))
+        search = request.args.get('search', '')
 
-        # Hitung offset
-        offset = (page - 1) * limit
-
-        # Query dengan filter pencarian
         query = User.query
         if search:
-            query = query.filter(
-                User.nama_user.ilike(f"%{search}%") | User.email.ilike(f"%{search}%")
-            )
+            query = query.filter(User.nama_user.ilike(f"%{search}%") | User.email.ilike(f"%{search}%"))
 
-        # Query data dengan limit dan offset
-        users = query.order_by(User.id).offset(offset).limit(limit).all()
-
-        # Hitung total data (termasuk hasil filter)
+        users = query.order_by(User.id).offset((page - 1) * limit).limit(limit).all()
         total_users = query.count()
 
-        # Format data dengan menyertakan points
-        users_list = []
-        for user in users:
-            user_points = Points.query.filter_by(user_id=user.id).first()
-            users_list.append({
-                "id": user.id,
-                "nama_user": user.nama_user,
-                "email": user.email,
-                "role": user.role,
-                "is_verified": user.is_verified,
-                "otp": user.otp,
-                "points": user_points.points if user_points else 0  # Sertakan points
-            })
+        users_list = [{
+            "id": user.id,
+            "nama_user": user.nama_user,
+            "email": user.email,
+            "role": user.role,
+            "is_verified": user.is_verified,
+            "otp": user.otp,
+            "points": Points.query.filter_by(user_id=user.id).first().points if Points.query.filter_by(user_id=user.id).first() else 0
+        } for user in users]
 
         return jsonify({
             'success': True,
@@ -60,11 +52,11 @@ def get_users():
             'page': page,
             'limit': limit
         })
-
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500
 
 
+# DELETE USER
 @user_blueprint.route('/delete/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
     try:
@@ -72,11 +64,8 @@ def delete_user(user_id):
         if not user:
             return jsonify({'success': False, 'message': 'User tidak ditemukan'}), 404
 
-        # Hapus data pengguna
         db.session.delete(user)
         db.session.commit()
-
-        # Reset ID secara berurutan
         reset_ids()
 
         return jsonify({'success': True, 'message': 'User berhasil dihapus'})
@@ -84,141 +73,116 @@ def delete_user(user_id):
         return jsonify({'success': False, 'message': str(e)}), 500
 
 
+# Fungsi Reset ID
 def reset_ids():
-    """Fungsi untuk mereset ID secara berurutan"""
-    # Ambil semua data dengan urutan baru
     users = User.query.order_by(User.id).all()
-
-    # Reset ID untuk setiap user
     for index, user in enumerate(users):
         user.id = index + 1
-
-    # Update database
     db.session.commit()
-
-    # Set auto increment ke ID terakhir
     db.session.execute(text("ALTER TABLE users AUTO_INCREMENT = :id"), {"id": len(users) + 1})
     db.session.commit()
 
-@user_blueprint.route('/update/<int:user_id>', methods=['PUT'])
+@user_blueprint.route('/update/<int:user_id>', methods=['POST'])
 def update_user(user_id):
     try:
-        data = request.get_json()
-
-        # Validasi input
-        if 'nama_user' in data and not data['nama_user'].strip():
-            return jsonify({'success': False, 'message': 'Nama pengguna tidak boleh kosong'}), 400
-        if 'email' in data and not data['email'].strip():
-            return jsonify({'success': False, 'message': 'Email tidak boleh kosong'}), 400
-
-        # Ambil user berdasarkan ID
+        print("=== Debugging: Mulai update_user ===")  # Debugging Start
+        
+        # 1. Ambil user berdasarkan ID
         user = User.query.get(user_id)
         if not user:
-            return jsonify({'success': False, 'message': 'User tidak ditemukan'}), 404
+            print("User tidak ditemukan!")  # Debug
+            flash("User tidak ditemukan.", "personal_profile_error")
+            return redirect(url_for('admin.settings'))
 
-        # Update field user
-        allowed_fields = ['nama_user', 'email']
-        for field, value in data.items():
-            if field in allowed_fields:
-                setattr(user, field, value)
+        # 2. Validasi Input Nama dan Email
+        nama_user = request.form.get('nama_user', '').strip()
+        email = request.form.get('email', '').strip()
+        print(f"Input Nama User: {nama_user}, Email: {email}")  # Debug
 
-        # Update points jika ada
-        if 'points' in data:
-            user_points = Points.query.filter_by(user_id=user.id).first()
-            if user_points:
-                user_points.points = int(data['points'])
+        if not nama_user or not email:
+            print("Nama pengguna atau email kosong!")  # Debug
+            flash("Nama pengguna dan email tidak boleh kosong.", "personal_profile_error")
+            return redirect(url_for('admin.settings'))
+
+        user.nama_user = nama_user
+        user.email = email
+
+        # 3. Handle Avatar Upload
+        if 'avatar' in request.files:
+            file = request.files['avatar']
+            print("Avatar File Ditemukan:", file.filename)  # Debug
+
+            if file and allowed_file(file.filename):
+                print("Ekstensi File Diperbolehkan")  # Debug
+
+                # Generate nama file unik
+                filename = f"{int(time())}_{secure_filename(file.filename)}"
+                filepath = os.path.join(UPLOAD_FOLDER, filename)
+                print("Filepath Avatar Baru:", filepath)  # Debug
+
+                # Hapus avatar lama jika bukan default
+                if user.avatar and user.avatar != DEFAULT_AVATAR:
+                    old_avatar_path = os.path.join(UPLOAD_FOLDER, user.avatar)
+                    if os.path.exists(old_avatar_path):
+                        os.remove(old_avatar_path)
+                        print("Avatar Lama Dihapus:", old_avatar_path)  # Debug
+
+                # Simpan avatar baru
+                file.save(filepath)
+                print("Avatar Baru Disimpan:", filepath)  # Debug
+                user.avatar = filename
             else:
-                # Jika user belum memiliki entry points, buat yang baru
-                new_points = Points(user_id=user.id, points=int(data['points']))
-                db.session.add(new_points)
+                print("File tidak valid atau tipe file tidak diperbolehkan.")  # Debug
+                flash("Tipe file tidak valid. Gunakan format JPG, PNG, atau GIF.", "personal_profile_error")
+                return redirect(url_for('admin.settings'))
+        else:
+            print("Tidak ada file avatar yang diunggah.")  # Debug
 
+        # 4. Commit perubahan ke database
         db.session.commit()
+        print("Database diperbarui.")  # Debug
 
-        return jsonify({'success': True, 'message': 'User berhasil diperbarui'})
+        # 5. Update session
+        session['user'] = {
+            'id': user.id,
+            'nama_user': user.nama_user,
+            'email': user.email,
+            'avatar': user.avatar if user.avatar else DEFAULT_AVATAR,
+            'role': user.role
+        }
+        print("Session diperbarui:", session['user'])  # Debug
+
+        # 6. Flash message sukses
+        flash("Profil berhasil diperbarui.", "personal_profile_success")
+        print("=== Debugging: Selesai update_user ===")  # Debugging End
+        return redirect(url_for('admin.settings'))
+
     except Exception as e:
-        return jsonify({'success': False, 'message': str(e)}), 500
+        print("Error terjadi:", str(e))  # Debug
+        flash(f"Terjadi kesalahan: {str(e)}", "personal_profile_error")
+        return redirect(url_for('admin.settings'))
 
-
-# Fungsi validasi ekstensi file
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-# Upload avatar
-@user_blueprint.route('/upload-avatar', methods=['POST'])
-def upload_avatar():
-    if 'user' not in session:
-        return jsonify({'success': False, 'message': 'Anda harus login untuk mengunggah avatar'}), 403
-
-    if 'file' not in request.files:
-        return jsonify({'success': False, 'message': 'Tidak ada file yang diunggah'}), 400
-
-    file = request.files['file']
-
-    if file.filename == '':
-        return jsonify({'success': False, 'message': 'File tidak dipilih'}), 400
-
-    if file and allowed_file(file.filename):
-        try:
-            # Pastikan folder upload ada
-            if not os.path.exists(app.config['UPLOAD_FOLDER']):
-                os.makedirs(app.config['UPLOAD_FOLDER'])
-
-            # Amankan nama file dan tambahkan timestamp
-            filename = secure_filename(file.filename)
-            filename = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{filename}"
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-
-            # Ambil user dari session
-            user = User.query.filter_by(email=session['user']['email']).first()
-            if not user:
-                return jsonify({'success': False, 'message': 'User tidak ditemukan'}), 404
-
-            # Hapus avatar lama jika ada dan bukan default
-            if user.avatar and user.avatar != DEFAULT_AVATAR:
-                old_avatar_path = os.path.join(app.config['UPLOAD_FOLDER'], user.avatar)
-                if os.path.exists(old_avatar_path):
-                    os.remove(old_avatar_path)
-
-            # Simpan avatar baru
-            file.save(file_path)
-            user.avatar = filename  # Update nama file avatar di database
-            db.session.commit()
-
-            # Perbarui session
-            session['user']['avatar'] = user.avatar if user.avatar else DEFAULT_AVATAR
-
-            # Kirim URL avatar baru
-            avatar_url = url_for('static', filename=f'uploads/avatars/{filename}')
-            return jsonify({'success': True, 'message': 'Avatar berhasil diperbarui', 'avatar_url': avatar_url})
-
-        except Exception as e:
-            return jsonify({'success': False, 'message': f"Terjadi kesalahan: {str(e)}"}), 500
-    else:
-        return jsonify({'success': False, 'message': 'Tipe file tidak diperbolehkan'}), 400
-
-
-# Reset avatar ke default
+# RESET AVATAR KE DEFAULT
 @user_blueprint.route('/reset-avatar', methods=['POST'])
 def reset_avatar():
     try:
         user = User.query.filter_by(email=session['user']['email']).first()
         if not user:
-            return jsonify({'success': False, 'message': 'User tidak ditemukan'}), 404
+            flash("User tidak ditemukan", "danger")
+            return redirect(url_for('admin.settings'))
 
         # Hapus avatar lama jika bukan default
         if user.avatar and user.avatar != DEFAULT_AVATAR:
-            old_avatar_path = os.path.join(app.config['UPLOAD_FOLDER'], user.avatar)
+            old_avatar_path = os.path.join(UPLOAD_FOLDER, user.avatar)
             if os.path.exists(old_avatar_path):
                 os.remove(old_avatar_path)
 
-        # Set avatar ke default
         user.avatar = DEFAULT_AVATAR
         db.session.commit()
 
-        # **Perbarui session**
-        session['user']['avatar'] = user.avatar  # Update avatar di session
-
-        avatar_url = url_for('static', filename=f'uploads/avatars/{DEFAULT_AVATAR}')
-        return jsonify({'success': True, 'message': 'Avatar berhasil direset', 'avatar_url': avatar_url})
+        session['user']['avatar'] = DEFAULT_AVATAR
+        flash("Avatar berhasil direset ke default", "success")
+        return redirect(url_for('admin.settings'))
     except Exception as e:
-        return jsonify({'success': False, 'message': str(e)}), 500
+        flash(f"Terjadi kesalahan: {str(e)}", "danger")
+        return redirect(url_for('admin.settings'))
