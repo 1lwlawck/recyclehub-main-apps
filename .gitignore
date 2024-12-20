@@ -1,5 +1,17 @@
 venv/
 .env
-**/__pycache__/
+api/__pycache__/
+controllers/__pycache__/
+migrations/__pycache__/
+models/__pycache__/
+modules/__pycache__/
 *.pyc
 *.pyo
+
+# git rm -r --cached api/__pycache__
+# git rm -r --cached controllers/__pycache__
+# git rm -r --cached migrations/__pycache__
+# git rm -r --cached models/__pycache__
+# git rm -r --cached modules/__pycache__
+# git rm --cached *.pyc
+# git rm --cached *.pyo
