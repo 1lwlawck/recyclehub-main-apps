@@ -26,13 +26,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = os.getenv('SQLALCHEMY_TRACK_MODIFICATIONS') == 'True'
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
-
 # Inisialisasi ekstensi Flask
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 migrate = Migrate(app, db)
 jwt = JWTManager(app)
-
 
 # Uji koneksi database
 try:
@@ -41,7 +39,6 @@ try:
         print("Database connection successful!")
 except Exception as e:
     print(f"Database connection failed: {e}")
-
 
 
 # Impor blueprint

@@ -8,7 +8,6 @@ from app import app
 # Membuat Blueprint untuk Admin
 admin_blueprint = Blueprint('admin', __name__, url_prefix='/admin')
 
-
 # Halaman Dashboard
 @admin_blueprint.route('/dashboard')
 @login_required
