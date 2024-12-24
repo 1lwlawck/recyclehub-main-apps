@@ -26,6 +26,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = os.getenv('SQLALCHEMY_TRACK_MODIFICATIONS') == 'True'
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
+
 # Inisialisasi ekstensi Flask
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
@@ -49,6 +50,7 @@ from controllers.email_controller import email_blueprint
 from controllers.password_controller import password_blueprint
 from controllers.users_controller import user_blueprint
 from controllers.chatbot_controller import chatbot_blueprint
+from controllers.ArticleController import article_bp
 
 
 # Impor blueprint API
@@ -66,6 +68,7 @@ app.register_blueprint(email_blueprint, url_prefix='/email')
 app.register_blueprint(password_blueprint, url_prefix='/password')
 app.register_blueprint(user_blueprint)
 app.register_blueprint(chatbot_blueprint)
+app.register_blueprint(article_bp)
 
 
 # Registrasi blueprint API

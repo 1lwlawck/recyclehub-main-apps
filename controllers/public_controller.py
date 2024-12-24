@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, session, redirect, url_for
+from models.articles import Article
 
 public_blueprint = Blueprint('public', __name__)
 
@@ -12,7 +13,9 @@ def about():
 
 @public_blueprint.route('/articles')
 def articles():
-    return render_template('page/artikel-page.html')
+    # Ambil data artikel dari database
+    articles = Article.query.all()
+    return render_template('page/artikel-page.html', articles=articles)
 
 @public_blueprint.route('/contact')
 def contact():
@@ -26,3 +29,4 @@ def logout():
 @public_blueprint.route('/feedback')
 def feedback():
     return render_template('page/feedback-page.html')
+

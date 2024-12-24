@@ -82,6 +82,18 @@ def manage_user():
         flash('Terjadi kesalahan saat memuat halaman manage user.', 'danger')
         return jsonify({'message': 'Error loading manage user', 'error': str(e)}), 500
 
+@admin_blueprint.route('/article-post')
+@login_required
+@role_required(['superadmin'])
+def article_post():
+    try:
+        # Mengambil semua data user dari database
+        users = User.query.all()
+        return render_template('admin/article-post-admin.html', users=users , time=time)
+    except Exception as e:
+        flash('Terjadi kesalahan saat memuat halaman article post.', 'danger')
+        return jsonify({'message': 'Error loading manage user', 'error': str(e)}), 500
+
 
 @admin_blueprint.route('/settings')
 @login_required

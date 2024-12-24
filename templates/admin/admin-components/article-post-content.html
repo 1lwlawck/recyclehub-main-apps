@@ -1,0 +1,161 @@
+<div class="p-4 sm:ml-64 font-roboto">
+  <div class="mt-20">
+    <!-- Kontainer Form Pencarian dan Tombol Tambah -->
+    <div class="flex justify-between items-center mb-4">
+      <!-- Form Pencarian -->
+      <form class="max-w-md">
+        <label
+          for="search-article"
+          class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+          >Search</label
+        >
+        <div class="relative">
+          <input
+            type="search"
+            id="search-article"
+            class="block w-full p-4 pr-10 text-sm text-gray-900 border-1 border-black rounded-lg bg-slate-300 focus:ring-black focus:border-black shadow-neo dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 dark:focus:ring-white dark:focus:border-white"
+            placeholder="Cari Judul atau Penulis..."
+          />
+        </div>
+      </form>
+
+      <!-- Tombol Tambah Artikel -->
+      <button
+        id="openAddArticleModal"
+        class="px-6 py-3 bg-[#387478] text-gray-100 font-bold rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:bg-blue-400 active:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-600 dark:active:bg-blue-800"
+      >
+        Tambah Artikel
+      </button>
+    </div>
+
+    <!-- Tabel Data Artikel -->
+    <div
+      class="overflow-x-auto mt-8 rounded-lg border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] font-inconsolata"
+    >
+      <table
+        class="table-auto w-full text-sm bg-white text-gray-700 border-collapse dark:bg-gray-800 dark:text-gray-200"
+      >
+        <thead
+          class="bg-gradient-to-r from-yellow-400 to-orange-500 text-black border-b-4 border-black dark:text-white"
+        >
+          <tr>
+            <th
+              class="px-6 py-3 text-center font-extrabold text-lg uppercase border-r-2 border-black"
+            >
+              Judul Artikel
+            </th>
+            <th
+              class="px-6 py-3 text-center font-extrabold text-lg uppercase border-r-2 border-black"
+            >
+              Penulis
+            </th>
+            <th
+              class="px-6 py-3 text-center font-extrabold text-lg uppercase border-r-2 border-black"
+            >
+              Tanggal Publikasi
+            </th>
+            <th
+              class="px-6 py-3 text-center font-extrabold text-lg uppercase border-r-2 border-black"
+            >
+              Gambar Unggulan
+            </th>
+            <th class="px-6 py-3 text-center font-extrabold text-lg uppercase">
+              Aksi
+            </th>
+          </tr>
+        </thead>
+
+        <!-- Tabel Body: Data akan diisi secara dinamis -->
+        <tbody class="divide-y-4 divide-black dark:divide-gray-600"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Tambah Artikel -->
+<div
+  id="addArticleModal"
+  class="fixed inset-0 items-center justify-center bg-black bg-opacity-50 hidden z-50 flex"
+>
+  <div
+    class="w-96 px-8 py-6 bg-white border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] rounded-lg dark:bg-gray-800 dark:border-gray-600"
+  >
+    <h2 class="text-2xl font-bold mb-4 text-black dark:text-white">
+      Tambah Artikel
+    </h2>
+    <form id="addArticleForm" enctype="multipart/form-data">
+      <label
+        for="title"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        >Judul Artikel</label
+      >
+      <input
+        type="text"
+        id="title"
+        name="title"
+        class="w-full mb-4 p-2 border rounded dark:bg-gray-700 dark:text-white"
+        placeholder="Masukkan judul artikel"
+        required
+      />
+
+      <label
+        for="author"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        >Penulis</label
+      >
+      <input
+        type="text"
+        id="author"
+        name="author"
+        class="w-full mb-4 p-2 border rounded dark:bg-gray-700 dark:text-white"
+        placeholder="Masukkan nama penulis"
+        required
+      />
+
+      <label
+        for="profile_picture"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        >Foto Penulis</label
+      >
+      <input
+        type="file"
+        id="profile_picture"
+        name="profile_picture"
+        accept="image/*"
+        class="w-full mb-4 p-2 border rounded dark:bg-gray-700 dark:text-white"
+      />
+
+      <label
+        for="content"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        >Konten</label
+      >
+      <textarea
+        id="content"
+        name="content"
+        rows="5"
+        class="w-full mb-4 p-2 border rounded dark:bg-gray-700 dark:text-white"
+        placeholder="Masukkan konten artikel"
+        required
+      ></textarea>
+
+      <div class="flex justify-end space-x-4">
+        <button
+          type="button"
+          id="closeAddArticleModal"
+          class="px-4 py-2 bg-gray-300 border border-black rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:bg-gray-400 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white"
+        >
+          Batal
+        </button>
+        <button
+          type="submit"
+          class="px-4 py-2 bg-blue-500 text-white font-bold rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:bg-blue-600"
+        >
+          Simpan
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/admin/ArticlePost.js') }}"></script>
