@@ -58,7 +58,7 @@ from api.auth_api import auth_api_blueprint
 from api.get_user_points_api import points_blueprint
 from api.sentiment_api import sentiment_bp
 from api.get_all_users_data import get_all_users_bp
-
+from controllers.order_controller import order_blueprint
 
 # Registrasi blueprint
 app.register_blueprint(public_blueprint, url_prefix='/')  
@@ -69,6 +69,7 @@ app.register_blueprint(password_blueprint, url_prefix='/password')
 app.register_blueprint(user_blueprint)
 app.register_blueprint(chatbot_blueprint)
 app.register_blueprint(article_bp)
+app.register_blueprint(order_blueprint, url_prefix='/orders')
 
 
 # Registrasi blueprint API
@@ -91,3 +92,8 @@ def ensure_avatar_in_session():
 # Jalankan aplikasi
 if __name__ == '__main__':
     app.run()
+
+# Order
+from models.order import Order, JenisSampah, DetailSampah
+
+
