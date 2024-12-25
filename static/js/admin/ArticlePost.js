@@ -3,53 +3,62 @@ const openModalButton = document.getElementById("openAddArticleModal");
 const closeModalButton = document.getElementById("closeAddArticleModal");
 const addArticleModal = document.getElementById("addArticleModal");
 const addArticleForm = document.getElementById("addArticleForm");
+const closeEditModalButton = document.getElementById("closeEditArticleModal");
 
-// Fungsi untuk membuka modal
+// Fungsi untuk membuka modal tambah artikel
 openModalButton.addEventListener("click", () => {
   addArticleModal.classList.remove("hidden");
 });
 
-// Fungsi untuk menutup modal
+// Fungsi untuk menutup modal tambah artikel
 closeModalButton.addEventListener("click", () => {
   addArticleModal.classList.add("hidden");
 });
 
-// Fungsi untuk menangani submit form
-addArticleForm.addEventListener("submit", (e) => {
+// Submit form tambah artikel
+addArticleForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const formData = new FormData();
   formData.append("title", document.getElementById("title").value);
   formData.append("author", document.getElementById("author").value);
   formData.append("content", document.getElementById("content").value);
+
+  // Ambil file gambar penulis (profile_picture)
   const profilePicture = document.getElementById("profile_picture").files[0];
   if (profilePicture) {
     formData.append("profile_picture", profilePicture);
   }
 
-  fetch("/articles/new", {
-    method: "POST",
-    body: formData,
-  })
-    .then((response) => {
-      if (response.ok) {
-        alert("Artikel berhasil ditambahkan!");
-        addArticleModal.classList.add("hidden");
-        loadArticles(); // Perbarui tabel
-      } else {
-        alert("Gagal menambahkan artikel.");
-      }
-    })
-    .catch((error) => {
-      console.error("Error:", error);
+  // Ambil file gambar artikel (article_image)
+  const articleImage = document.getElementById("article_image").files[0];
+  if (articleImage) {
+    formData.append("article_image", articleImage); // Tambahkan gambar artikel ke FormData
+  }
+
+  try {
+    const response = await fetch("/articles/new", {
+      method: "POST",
+      body: formData,
     });
+
+    if (!response.ok) {
+      throw new Error("Gagal menambahkan artikel.");
+    }
+
+    alert("Artikel berhasil ditambahkan!");
+    addArticleModal.classList.add("hidden");
+    loadArticles();
+  } catch (error) {
+    console.error("Error:", error);
+    alert(error.message);
+  }
 });
 
-// Fungsi untuk memuat data artikel dan menampilkannya di tabel
+// Fungsi untuk memuat artikel ke tabel
 async function loadArticles() {
   try {
     const response = await fetch("/articles/list");
-
     if (!response.ok) {
       throw new Error("Gagal memuat data artikel.");
     }
@@ -57,46 +66,27 @@ async function loadArticles() {
     const articles = await response.json();
     const tableBody = document.querySelector("tbody");
 
-    // Kosongkan tabel sebelum menambahkan data baru
     tableBody.innerHTML = "";
 
-    // Jika tidak ada artikel
     if (articles.length === 0) {
       tableBody.innerHTML = `
         <tr>
-          <td colspan="5" class="text-center py-4 text-gray-500">Tidak ada artikel tersedia.</td>
+          <td colspan="4" class="text-center py-4 text-gray-500">Tidak ada artikel tersedia.</td>
         </tr>
       `;
       return;
     }
 
-    // Tambahkan data artikel ke tabel
     articles.forEach((article) => {
       const row = document.createElement("tr");
 
       row.innerHTML = `
-        <td class="px-6 py-3 border-r-2 border-black text-center">${
-          article.title
-        }</td>
-        <td class="px-6 py-3 border-r-2 border-black text-center">${
-          article.author
-        }</td>
-        <td class="px-6 py-3 border-r-2 border-black text-center">${
-          article.published_date
-        }</td>
-        <td class="px-6 py-3 border-r-2 border-black text-center">
-          <img src="${
-            article.featured_image || "/static/images/default.jpg"
-          }" alt="Gambar Artikel" class="w-20 h-20 object-cover">
-        </td>
+        <td class="px-6 py-3 border-r-2 border-black text-center">${article.title}</td>
+        <td class="px-6 py-3 border-r-2 border-black text-center">${article.author}</td>
+        <td class="px-6 py-3 border-r-2 border-black text-center">${article.published_date}</td>
         <td class="px-6 py-3 text-center">
-          <a href="/articles/${article.id}" class="text-blue-600">Lihat</a> |
-          <a href="/articles/edit/${
-            article.id
-          }" class="text-yellow-600">Edit</a> |
-          <button class="text-red-600" onclick="deleteArticle(${
-            article.id
-          })">Hapus</button>
+          <button onclick="openEditModal(${article.id})" class="text-yellow-600">Edit</button> |
+          <button onclick="deleteArticle(${article.id})" class="text-red-600">Hapus</button>
         </td>
       `;
 
@@ -104,9 +94,68 @@ async function loadArticles() {
     });
   } catch (error) {
     console.error("Error:", error);
-    alert("Gagal memuat data artikel.");
+    alert(error.message);
   }
 }
+
+// Fungsi untuk membuka modal edit artikel
+async function openEditModal(articleId) {
+  try {
+    const response = await fetch(`/articles/get/${articleId}`);
+    if (!response.ok) {
+      throw new Error("Gagal memuat data artikel.");
+    }
+
+    const article = await response.json();
+
+    document.getElementById("editArticleId").value = article.id;
+    document.getElementById("editTitle").value = article.title;
+    document.getElementById("editAuthor").value = article.author;
+    document.getElementById("editContent").value = article.content;
+
+    document.getElementById("editArticleModal").classList.remove("hidden");
+  } catch (error) {
+    console.error("Error:", error);
+    alert(error.message);
+  }
+}
+
+// Tutup modal edit
+closeEditModalButton.addEventListener("click", () => {
+  document.getElementById("editArticleModal").classList.add("hidden");
+});
+
+// Submit form edit artikel
+document
+  .getElementById("editArticleForm")
+  .addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const articleId = document.getElementById("editArticleId").value;
+
+    const formData = new FormData();
+    formData.append("title", document.getElementById("editTitle").value);
+    formData.append("author", document.getElementById("editAuthor").value);
+    formData.append("content", document.getElementById("editContent").value);
+
+    try {
+      const response = await fetch(`/articles/update/${articleId}`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Gagal memperbarui artikel.");
+      }
+
+      alert("Artikel berhasil diperbarui.");
+      document.getElementById("editArticleModal").classList.add("hidden");
+      loadArticles();
+    } catch (error) {
+      console.error("Error:", error);
+      alert(error.message);
+    }
+  });
 
 // Fungsi untuk menghapus artikel
 async function deleteArticle(articleId) {
@@ -124,10 +173,10 @@ async function deleteArticle(articleId) {
     }
 
     alert("Artikel berhasil dihapus.");
-    loadArticles(); // Perbarui tabel
+    loadArticles();
   } catch (error) {
     console.error("Error:", error);
-    alert("Terjadi kesalahan saat menghapus artikel.");
+    alert(error.message);
   }
 }
 

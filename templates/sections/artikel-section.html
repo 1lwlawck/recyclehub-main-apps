@@ -18,17 +18,24 @@
           class="mb-8 border-4 border-black rounded-lg shadow-[8px_8px_0px_rgba(0,0,0,1)] bg-white"
         >
           <div class="flex flex-col sm:flex-row">
-            <img
-              alt="{{ article.title }}"
-              class="w-full sm:w-1/3 object-cover mb-4 sm:mb-0 border-b-4 sm:border-b-0 sm:border-r-4 border-black"
-              src="{{ article.featured_image or url_for('static', filename='images/default.jpg') }}"
-            />
+            <!-- Gambar Artikel -->
+            <div class="w-full sm:w-1/3 h-64">
+              <img
+                src="{{ url_for('static', filename='uploads/image_artikel/' + article.article_image) }}"
+                alt="{{ article.title }}"
+                class="w-full h-full object-cover border-b-4 sm:border-b-0 sm:border-r-4 border-black rounded"
+              />
+            </div>
+
+            <!-- Konten Artikel -->
             <div class="w-full sm:w-2/3 p-4 bg-[#E8FFDC]">
               <h3 class="text-sm font-bold text-gray-800">Kategori</h3>
               <h2 class="text-xl font-bold text-black mt-2">
                 {{ article.title }}
               </h2>
-              <p class="text-gray-700 mt-2">{{ article.content[:150] }}...</p>
+              <p class="text-gray-700 mt-2">
+                {{ article.content[:150] | safe }}...
+              </p>
               <a
                 class="text-[#006A67] font-semibold mt-4 inline-block hover:underline"
                 href="/articles/{{ article.slug }}"
