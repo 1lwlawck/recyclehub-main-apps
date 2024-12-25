@@ -43,9 +43,8 @@
           </h1>
         </header>
 
-        <!-- Konten Artikel -->
         <div class="prose prose-lg text-gray-800">
-          {% for paragraph in article.content.split('\n\n') %}
+          {% for paragraph in paragraphs %}
           <p class="mb-4 leading-relaxed">{{ paragraph }}</p>
           {% endfor %}
         </div>
