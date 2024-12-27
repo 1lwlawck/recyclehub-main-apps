@@ -43,22 +43,23 @@ except Exception as e:
 
 
 # Impor blueprint
-from controllers.auth_controller import auth_blueprint
-from controllers.admin_controller import admin_blueprint
-from controllers.public_controller import public_blueprint 
-from controllers.email_controller import email_blueprint
-from controllers.password_controller import password_blueprint
-from controllers.users_controller import user_blueprint
-from controllers.chatbot_controller import chatbot_blueprint
+from controllers.AuthController import auth_blueprint
+from controllers.AdminController import admin_blueprint
+from controllers.PublicController import public_blueprint 
+from controllers.PasswordController import password_blueprint
+from controllers.UsersController import user_blueprint
+from controllers.ChatbotController import chatbot_blueprint
 from controllers.ArticleController import article_bp
+from controllers.OrderController import order_blueprint
 
 
 # Impor blueprint API
-from api.auth_api import auth_api_blueprint 
-from api.get_user_points_api import points_blueprint
-from api.sentiment_api import sentiment_bp
-from api.get_all_users_data import get_all_users_bp
-from controllers.order_controller import order_blueprint
+from api.Authentication import auth_api_blueprint 
+from api.Sentiment import sentiment_bp
+from api.Users import users_api_blueprint
+from api.Articles import articles_api
+from api.Emails import email_blueprint
+
 
 # Registrasi blueprint
 app.register_blueprint(public_blueprint, url_prefix='/')  
@@ -74,9 +75,9 @@ app.register_blueprint(order_blueprint, url_prefix='/orders')
 
 # Registrasi blueprint API
 app.register_blueprint(auth_api_blueprint)
-app.register_blueprint(points_blueprint)
 app.register_blueprint(sentiment_bp, url_prefix='/api/sentiment')
-app.register_blueprint(get_all_users_bp, url_prefix='/api/users')
+app.register_blueprint(users_api_blueprint, url_prefix='/api/users')
+app.register_blueprint(articles_api)
 
 from models.user import User
 
@@ -93,7 +94,5 @@ def ensure_avatar_in_session():
 if __name__ == '__main__':
     app.run()
 
-# Order
-from models.order import Order, JenisSampah, DetailSampah
 
 

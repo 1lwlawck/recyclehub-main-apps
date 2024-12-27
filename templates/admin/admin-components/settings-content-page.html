@@ -1,141 +1,194 @@
 <div class="dark:bg-gray-900 text-gray-100 font-inconsolata min-h-screen p-10">
-  <!-- Grid Container -->
-  <div class="grid grid-cols-[2fr,1fr] gap-8 mb-4 mt-[50px] ml-[250px]">
-    <!-- Kolom 1: Personal Information -->
-    <div
-      class="flex flex-col rounded bg-gray-50 border-4 border-green-800 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] p-8 transition dark:bg-gray-800 dark:text-gray-100"
+<!-- Grid Container -->
+<div class="grid grid-cols-[2fr,1fr] gap-8 mb-4 mt-[50px] ml-[250px]">
+  <!-- Kolom 1: Personal Information -->
+  <div class="flex flex-col rounded bg-gray-50 border-4 border-green-800 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] p-8 transition dark:bg-gray-800 dark:text-gray-100">
+    <!-- Title -->
+    <h1 class="text-2xl font-bold dark:text-gray-100 text-black mb-4">Personal Information</h1>
+    <p class="text-sm text-gray-600 dark:text-gray-400 mb-6">
+      Use a permanent address where you can receive mail.
+    </p>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-container mb-4">
+          {% for category, message in messages %}
+            {% if 'personal_profile' in category %}
+              <div
+                class="p-2 mb-2 text-sm rounded shadow {% if 'success' in category %} bg-green-500 text-white {% elif 'error' in category %} bg-red-500 text-white {% endif %}">
+                <strong>Personal Profile: </strong>{{ message }}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Form Fields -->
+    <form
+      action="{{ url_for('user.update_user', user_id=session['user']['id']) }}"
+      method="POST"
+      enctype="multipart/form-data"
+      class="space-y-6"
     >
-      <!-- Title -->
-      <h1 class="text-2xl font-bold dark:text-gray-100 text-black mb-4">
-        Personal Information
-      </h1>
-      <p class="text-sm text-gray-600 dark:text-gray-400 mb-6">
-        Use a permanent address where you can receive mail.
-      </p>
-
-      <!-- Flash Messages -->
-      {% with messages = get_flashed_messages(with_categories=true) %} {% if
-      messages %}
-      <div class="flash-container mb-4">
-        {% for category, message in messages %} {% if 'personal_profile' in
-        category %}
-        <div
-          class="p-2 mb-2 text-sm rounded shadow {% if 'success' in category %} bg-green-500 text-white {% elif 'error' in category %} bg-red-500 text-white {% endif %}"
-        >
-          <strong>Personal Profile: </strong>{{ message }}
+      <!-- Avatar Upload & Preview -->
+      <div class="flex items-center gap-6 mb-6">
+        <!-- Avatar Preview -->
+        <div class="w-20 h-20 flex items-center justify-center">
+          <img
+            id="avatar-preview"
+            src="{{ url_for('static', filename='uploads/avatars/' + session['user'].get('avatar', 'default-avatar.png')) }}?t={{ time() }}"
+            alt="Avatar Preview"
+            class="w-full h-full rounded-full border-4 border-green-500 object-cover"
+          />
         </div>
-        {% endif %} {% endfor %}
+
+        <!-- Input File -->
+        <div class="flex-1">
+          <label
+            for="avatar"
+            class="block text-sm font-bold mb-2 text-black dark:text-gray-100"
+          >
+            Upload Avatar
+          </label>
+          <input
+            type="file"
+            id="avatar"
+            name="avatar"
+            accept=".jpg, .jpeg, .png, .gif"
+            class="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+          />
+        </div>
       </div>
-      {% endif %} {% endwith %}
 
-      <!-- Form Fields -->
-      <form
-        action="{{ url_for('user.update_user', user_id=session['user']['id']) }}"
-        method="POST"
-        enctype="multipart/form-data"
-        class="space-y-6"
-      >
-        <!-- Avatar Upload & Preview -->
-        <div class="flex items-center gap-6 mb-6">
-          <!-- Avatar Preview -->
-          <div class="w-20 h-20 flex items-center justify-center">
-            <img
-              id="avatar-preview"
-              src="{{ url_for('static', filename='uploads/avatars/' + session['user'].get('avatar', 'default-avatar.png')) }}?t={{ time() }}"
-              alt="Avatar Preview"
-              class="w-full h-full rounded-full border-4 border-green-500 object-cover"
-            />
-          </div>
-
-          <!-- Input File -->
-          <div class="flex-1">
-            <label
-              for="avatar"
-              class="block text-sm font-bold mb-2 text-black dark:text-gray-100"
-            >
-              Upload Avatar
-            </label>
-            <input
-              type="file"
-              id="avatar"
-              name="avatar"
-              accept=".jpg, .jpeg, .png, .gif"
-              class="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
-            />
-          </div>
-        </div>
-
-        <!-- Nama Pengguna -->
-        <div>
-          {% if session['user']['role'] == 'superadmin' %}
-          <label
-            for="nama_user"
-            class="block text-sm font-bold mb-2 dark:text-gray-100 text-black"
-          >
-            Nama Pengguna (Superadmin)
-          </label>
-          {% elif session['user']['role'] == 'admin' %}
-          <label
-            for="nama_user"
-            class="block text-sm font-bold mb-2 dark:text-gray-100 text-black"
-          >
-            Nama Bank Sampah
-          </label>
-          {% endif %}
-
-          <input
-            type="text"
-            id="nama_user"
-            name="nama_user"
-            class="w-full px-4 py-2 bg-gray-100 border-2 border-green-500 rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:ring-2 focus:ring-green-400 focus:outline-none dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-green-500 text-gray-900 pr-10"
-            value="{{ session['user']['nama_user'] }}"
-            required
-          />
-        </div>
-
-        <!-- Alamat Email -->
-        <div>
-          <label
-            for="email"
-            class="block text-sm font-bold mb-2 dark:text-gray-100 text-black"
-            >Alamat Email</label
-          >
-          <input
-            type="email"
-            id="email"
-            name="email"
-            class="w-full px-4 py-2 bg-gray-100 border-2 border-green-500 rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:ring-2 focus:ring-green-400 focus:outline-none dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-green-500 text-gray-900 pr-10"
-            value="{{ session['user']['email'] }}"
-            required
-          />
-        </div>
-
-        <!-- Role -->
-        <div>
-          <label
-            for="role"
-            class="block text-sm font-bold mb-2 dark:text-gray-100 text-black"
-            >Role</label
-          >
-          <input
-            type="text"
-            id="role"
-            name="role"
-            class="w-full px-4 py-2 bg-gray-400 font-bold uppercase border-2 border-green-500 rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:ring-2 focus:ring-green-400 focus:outline-none dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-green-500 text-gray-900"
-            value="{{ session['user']['role'] }}"
-            disabled
-          />
-        </div>
-
-        <!-- Submit Button -->
-        <button
-          type="submit"
-          class="px-6 py-3 bg-[#387478] text-gray-100 font-bold rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:bg-blue-400 active:bg-blue-600 mt-4 dark:bg-blue-700 dark:hover:bg-blue-600 dark:active:bg-blue-800"
+      <!-- Nama Pengguna -->
+      <div>
+        <label
+          for="nama_user"
+          class="block text-sm font-bold mb-2 dark:text-gray-100 text-black"
         >
-          Save
-        </button>
-      </form>
-    </div>
+          {% if session['user']['role'] == 'superadmin' %}
+            Nama Pengguna (Superadmin)
+          {% elif session['user']['role'] == 'admin' %}
+            Nama Bank Sampah
+          {% endif %}
+        </label>
+        <input
+          type="text"
+          id="nama_user"
+          name="nama_user"
+          class="w-full px-4 py-2 bg-gray-100 border-2 border-green-500 rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:ring-2 focus:ring-green-400 focus:outline-none dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-green-500 text-gray-900 pr-10"
+          value="{{ session['user']['nama_user'] }}"
+          required
+        />
+      </div>
+
+      <!-- Alamat Email -->
+      <div>
+        <label
+          for="email"
+          class="block text-sm font-bold mb-2 dark:text-gray-100 text-black"
+        >
+          Alamat Email
+        </label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          class="w-full px-4 py-2 bg-gray-100 border-2 border-green-500 rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:ring-2 focus:ring-green-400 focus:outline-none dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-green-500 text-gray-900 pr-10"
+          value="{{ session['user']['email'] }}"
+          required
+        />
+      </div>
+
+      <!-- Jenis Kelamin -->
+      <div>
+        <label
+          for="jenis_kelamin"
+          class="block text-sm font-bold mb-2 dark:text-gray-100 text-black"
+        >
+          Jenis Kelamin
+        </label>
+        <select
+          id="jenis_kelamin"
+          name="jenis_kelamin"
+          class="w-full px-4 py-2 bg-gray-100 border-2 border-green-500 rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:ring-2 focus:ring-green-400 focus:outline-none dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-green-500 text-gray-900"
+          required
+        >
+          <option value="">Pilih Jenis Kelamin</option>
+          <option value="Laki-laki" {% if session['user'].get('jenis_kelamin') == 'Laki-laki' %}selected{% endif %}>
+            Laki-laki
+          </option>
+          <option value="Perempuan" {% if session['user'].get('jenis_kelamin') == 'Perempuan' %}selected{% endif %}>
+            Perempuan
+          </option>
+        </select>
+      </div>
+
+      <!-- Tanggal Lahir -->
+      <div>
+        <label
+          for="tanggal_lahir"
+          class="block text-sm font-bold mb-2 dark:text-gray-100 text-black"
+        >
+          Tanggal Lahir
+        </label>
+        <input
+          type="date"
+          id="tanggal_lahir"
+          name="tanggal_lahir"
+          class="w-full px-4 py-2 bg-gray-100 border-2 border-green-500 rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:ring-2 focus:ring-green-400 focus:outline-none dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-green-500 text-gray-900"
+          value="{{ session['user'].get('tanggal_lahir', '') }}"
+          required
+        />
+      </div>
+
+      <!-- Nomor HP -->
+      <div>
+        <label
+          for="nomor_hp"
+          class="block text-sm font-bold mb-2 dark:text-gray-100 text-black"
+        >
+          Nomor HP
+        </label>
+        <input
+          type="text"
+          id="nomor_hp"
+          name="nomor_hp"
+          class="w-full px-4 py-2 bg-gray-100 border-2 border-green-500 rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:ring-2 focus:ring-green-400 focus:outline-none dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-green-500 text-gray-900"
+          value="{{ session['user']['nomor_hp'] }}"
+        />
+      </div>
+
+      <!-- Role -->
+      <div>
+        <label
+          for="role"
+          class="block text-sm font-bold mb-2 dark:text-gray-100 text-black"
+        >
+          Role
+        </label>
+        <input
+          type="text"
+          id="role"
+          name="role"
+          class="w-full px-4 py-2 bg-gray-400 font-bold uppercase border-2 border-green-500 rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] focus:ring-2 focus:ring-green-400 focus:outline-none dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-green-500 text-gray-900"
+          value="{{ session['user']['role'] }}"
+          disabled
+        />
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="px-6 py-3 bg-[#387478] text-gray-100 font-bold rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:bg-blue-400 active:bg-blue-600 mt-4 dark:bg-blue-700 dark:hover:bg-blue-600 dark:active:bg-blue-800"
+      >
+        Save
+      </button>
+    </form>
+  </div>
+
 
     <!-- Kolom 2: Change Password -->
     <div
@@ -253,23 +306,28 @@
     </div>
   </div>
   <!-- Delete Account Section -->
-  <div
-    class="flex items-center justify-between rounded bg-gray-50 border-4 border-red-600 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] p-8 transition dark:bg-gray-800 dark:text-gray-100 mt-8 ml-[250px]"
-  >
-    <div>
-      <h1 class="text-xl font-bold dark:text-gray-100 text-black">
-        HAPUS AKUN ?
-      </h1>
-      <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
-        No longer want to use our service? You can delete your account here.
-        This action is not reversible. All information related to this account
-        will be deleted permanently.
-      </p>
-    </div>
-    <button
-      class="px-6 py-3 bg-red-600 text-gray-100 font-bold rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:bg-red-500 active:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 dark:active:bg-red-800"
-    >
-      Yes, delete my account
-    </button>
-  </div>
+<div
+class="flex flex-col items-start justify-between rounded bg-gray-50 border-4 border-red-600 shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] p-8 transition dark:bg-gray-800 dark:text-gray-100 mt-8 ml-[250px]"
+>
+<!-- Header -->
+<h1 class="text-xl font-bold dark:text-gray-100 text-black mb-2">
+  HAPUS AKUN ?
+</h1>
+<p class="text-sm text-gray-600 dark:text-gray-400 mb-6">
+  No longer want to use our service? You can delete your account here.
+  This action is not reversible. All information related to this account
+  will be deleted permanently.
+</p>
+
+<button
+  id="deleteAccountButton"
+  data-user-id="{{ session['user']['id'] }}"
+  class="px-6 py-3 bg-red-600 text-gray-100 font-bold rounded shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:bg-red-500 active:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 dark:active:bg-red-800"
+>
+  Yes, delete my account
+</button>
 </div>
+<script src="{{ url_for('static', filename='js/admin/DeleteAccount.js') }}"></script>
+</div>
+{% include 'admin/components/ModalDeleteAccount.html' %}
+

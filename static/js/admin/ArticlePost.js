@@ -37,7 +37,7 @@ addArticleForm.addEventListener("submit", async (e) => {
   }
 
   try {
-    const response = await fetch("/articles/new", {
+    const response = await fetch("/api/articles/new", {
       method: "POST",
       body: formData,
     });
@@ -58,7 +58,7 @@ addArticleForm.addEventListener("submit", async (e) => {
 // Fungsi untuk memuat artikel ke tabel
 async function loadArticles() {
   try {
-    const response = await fetch("/articles/list");
+    const response = await fetch("/api/articles/list");
     if (!response.ok) {
       throw new Error("Gagal memuat data artikel.");
     }
@@ -101,7 +101,7 @@ async function loadArticles() {
 // Fungsi untuk membuka modal edit artikel
 async function openEditModal(articleId) {
   try {
-    const response = await fetch(`/articles/get/${articleId}`);
+    const response = await fetch(`/api/articles/get/${articleId}`);
     if (!response.ok) {
       throw new Error("Gagal memuat data artikel.");
     }
@@ -139,7 +139,7 @@ document
     formData.append("content", document.getElementById("editContent").value);
 
     try {
-      const response = await fetch(`/articles/update/${articleId}`, {
+      const response = await fetch(`/api/articles/update/${articleId}`, {
         method: "POST",
         body: formData,
       });
@@ -157,19 +157,22 @@ document
     }
   });
 
-// Fungsi untuk menghapus artikel
 async function deleteArticle(articleId) {
   if (!confirm("Apakah Anda yakin ingin menghapus artikel ini?")) {
     return;
   }
 
   try {
-    const response = await fetch(`/articles/delete/${articleId}`, {
+    const response = await fetch(`/api/articles/delete/${articleId}`, {
       method: "DELETE",
     });
 
+    console.log("Response status:", response.status);
+
     if (!response.ok) {
-      throw new Error("Gagal menghapus artikel.");
+      const errorData = await response.json();
+      console.error("Error data:", errorData);
+      throw new Error(errorData.message || "Gagal menghapus artikel.");
     }
 
     alert("Artikel berhasil dihapus.");
