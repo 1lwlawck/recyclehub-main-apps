@@ -28,9 +28,9 @@
     <!-- Modal Logout -->
     {% include "admin/admin-components/logout-modal.html" %}
 
-    <script src="/static/js/dropdown.js"></script>
-    <script src="/static/js/modal.js"></script>
-    <script src="/static/js/theme-toggle.js"></script>
-    <script src="/static/js/dropdown.js"></script>
+    <script src="{{ url_for('static', filename='js/components/ModalLogout.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/DropdownProfile.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ThemeToggle.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/DropdownProfile.js') }}"></script>
   </body>
 </html>

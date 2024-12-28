@@ -4,7 +4,7 @@
 />
 <div class="bg-gray-100 flex items-center justify-center min-h-screen">
   <div
-    class="bg-white border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] rounded-lg max-w-md w-full"
+    class="bg-white border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] rounded-sm max-w-md w-full"
   >
     <div class="p-6 md:p-8 lg:p-10">
       <h1 class="text-2xl font-bold text-gray-800">Verifikasi Email</h1>
@@ -18,7 +18,7 @@
         {% with messages = get_flashed_messages(with_categories=true) %} {% for
         category, message in messages %}
         <div
-          class="p-3 mb-4 border-2 border-black rounded-md text-sm text-white bg-{{ 'red-500' if category == 'danger' else 'green-500' }}"
+          class="p-3 mb-4 border-2 border-black rounded-sm text-sm text-white bg-{{ 'red-500' if category == 'danger' else 'green-500' }}"
         >
           {{ message }}
         </div>
@@ -32,14 +32,14 @@
         <div>
           {{ form.otp.label(class="block text-sm font-medium text-gray-800") }}
           {{ form.otp( class="mt-1 block w-full px-3 py-2 border-2 border-black
-          rounded-md text-gray-800 focus:outline-none focus:ring-green-500
+          rounded-sm text-gray-800 focus:outline-none focus:ring-green-500
           focus:border-green-500" ) }} {% for error in form.otp.errors %}
           <span class="text-red-500 text-xs">{{ error }}</span>
           {% endfor %}
         </div>
 
         {{ form.submit( class="w-full py-2 px-4 bg-green-600 hover:bg-green-700
-        text-white font-bold rounded-md border-2 border-black
+        text-white font-bold rounded-sm border-2 border-black
         shadow-[4px_4px_0px_rgba(0,0,0,1)] transition-transform transform
         hover:scale-105" ) }}
       </form>
@@ -53,7 +53,7 @@
         </span>
         <span
           id="remaining-time"
-          class="text-sm text-red-600 font-bold bg-yellow-100 border-2 border-black px-2 rounded-md shadow-[2px_2px_0px_rgba(0,0,0,1)]"
+          class="text-sm text-red-600 font-bold bg-yellow-100 border-2 border-black px-2 rounded-sm shadow-[2px_2px_0px_rgba(0,0,0,1)]"
         >
           {{ remaining_time }}
         </span>
@@ -136,7 +136,7 @@
   function showFlashMessage(message, category) {
     const flashMessages = document.getElementById("flash-messages");
     const flashDiv = document.createElement("div");
-    flashDiv.className = `flash-message p-3 mt-4 rounded-md text-sm text-white bg-${
+    flashDiv.className = `flash-message p-3 mt-4 rounded-sm text-sm text-white bg-${
       category === "danger" ? "red-500" : "green-500"
     }`;
     flashDiv.textContent = message;

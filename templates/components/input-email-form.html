@@ -4,7 +4,7 @@
 />
 <div class="bg-gray-100 flex items-center justify-center min-h-screen">
   <div
-    class="bg-white border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] rounded-lg overflow-hidden max-w-md w-full"
+    class="bg-white border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] rounded-sm overflow-hidden max-w-md w-full"
   >
     <div class="p-6 md:p-8 lg:p-10">
       <h1 class="text-2xl font-bold text-gray-800">Lupa Kata Sandi</h1>
@@ -16,7 +16,7 @@
       {% with messages = get_flashed_messages(with_categories=true) %} {% for
       category, message in messages %}
       <div
-        class="p-3 mt-4 rounded-md text-sm text-white bg-{{ 'red-500' if category == 'danger' else 'green-500' }} border-2 border-black"
+        class="p-3 mt-4 rounded-sm text-sm text-white bg-{{ 'red-500' if category == 'danger' else 'green-500' }} border-2 border-black"
       >
         {{ message }}
       </div>
@@ -30,7 +30,7 @@
         <div>
           {{ form.email.label(class="block text-sm font-medium text-gray-800")
           }} {{ form.email( class="mt-1 block w-full px-3 py-2 border-2
-          border-black rounded-md text-gray-800 focus:outline-none
+          border-black rounded-sm text-gray-800 focus:outline-none
           focus:ring-green-500 focus:border-green-500" ) }} {% for error in
           form.email.errors %}
           <span class="text-red-500 text-xs">{{ error }}</span>
@@ -39,7 +39,7 @@
 
         <!-- Submit Button -->
         {{ form.submit( class="w-full py-2 px-4 bg-green-600 hover:bg-green-700
-        text-white font-bold rounded-md border-2 border-black
+        text-white font-bold rounded-sm border-2 border-black
         shadow-[4px_4px_0px_rgba(0,0,0,1)] transition-transform transform
         hover:scale-105" ) }}
       </form>

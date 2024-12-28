@@ -3,7 +3,7 @@
     <div class="container mx-auto py-16 flex justify-center">
       <!-- Main Content -->
       <div
-        class="bg-white max-w-4xl border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] rounded-lg p-6 dark:bg-gray-800 dark:border-white"
+        class="bg-white max-w-4xl border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] rounded-sm p-6 dark:bg-gray-800 dark:border-white"
       >
         <article
           class="mx-auto w-full format format-sm sm:format-base lg:format-lg format-blue dark:format-invert"
@@ -51,7 +51,7 @@
             <img
               src="{{ url_for('static', filename='uploads/image_artikel/' + article.article_image) }}"
               alt="{{ article.title }}"
-              class="w-full h-auto rounded-lg border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)]"
+              class="w-full h-auto rounded-sm border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)]"
             />
           </figure>
           {% endif %}
