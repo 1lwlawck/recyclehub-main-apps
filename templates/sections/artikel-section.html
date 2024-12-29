@@ -10,14 +10,14 @@
         Menyelamatkan bumi dengan inovasi baru dalam pengelolaan sampah plastik.
       </p>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <!-- <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"> -->
       <div class="lg:col-span-2">
         <!-- Loop untuk Artikel -->
         {% for article in articles %}
-        <div
-          class="mb-8 border-4 border-black rounded-sm shadow-[8px_8px_0px_rgba(0,0,0,1)] bg-white"
-        >
-          <div class="flex flex-col sm:flex-row">
+
+          <div
+            class="flex flex-col sm:flex-row mb-4 border-4 border-black rounded-sm shadow-[3px_3px_0px_rgba(0,0,0,1)] bg-white w-1/3"
+          >
             <!-- Gambar Artikel -->
             <div class="w-full sm:w-1/3 h-64">
               <img
@@ -50,44 +50,6 @@
       </div>
 
       <!-- Sidebar Artikel -->
-      <div
-        class="p-6 border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] bg-[#006A67] text-white"
-      >
-        <div class="mb-8">
-          <h3 class="text-sm font-semibold">Dampak Sampah Plastik</h3>
-          <h2 class="text-xl font-bold mt-2">
-            Dampak Plastik Terhadap Lingkungan Laut
-          </h2>
-          <p class="mt-2">
-            Plastik yang dibuang ke laut menyebabkan kerusakan ekosistem laut.
-            Pelajari lebih lanjut dampaknya.
-          </p>
-          <a
-            class="text-white font-semibold mt-4 inline-block hover:underline"
-            href="#"
-          >
-            Read More
-            <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-        <div>
-          <h3 class="text-sm font-semibold">Solusi</h3>
-          <h2 class="text-xl font-bold mt-2">
-            Inovasi dalam Pengolahan Sampah Plastik
-          </h2>
-          <p class="mt-2">
-            Berbagai inovasi terus berkembang dalam pengolahan sampah plastik,
-            dari teknologi daur ulang hingga solusi berbahan ramah lingkungan.
-          </p>
-          <a
-            class="text-white font-semibold mt-4 inline-block hover:underline"
-            href="#"
-          >
-            Read More
-            <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-      </div>
     </div>
   </div>
 </section>
