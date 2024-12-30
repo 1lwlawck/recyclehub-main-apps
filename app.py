@@ -9,6 +9,7 @@ from sqlalchemy import text
 import os 
 
 
+
 # Inisialisasi aplikasi Flask
 app = Flask(__name__)
 app.config['SESSION_TYPE'] = 'filesystem'  
@@ -51,6 +52,7 @@ from controllers.UsersController import user_blueprint
 from controllers.ChatbotController import chatbot_blueprint
 from controllers.ArticleController import article_bp
 from controllers.OrderController import order_blueprint
+from controllers.MessageController import message_blueprint
 
 
 # Impor blueprint API
@@ -59,6 +61,7 @@ from api.Sentiment import sentiment_bp
 from api.Users import users_api_blueprint
 from api.Articles import articles_api
 from api.Emails import email_blueprint
+from api.Message import messages_api_blueprint
 
 
 # Registrasi blueprint
@@ -71,6 +74,7 @@ app.register_blueprint(user_blueprint)
 app.register_blueprint(chatbot_blueprint)
 app.register_blueprint(article_bp)
 app.register_blueprint(order_blueprint, url_prefix='/orders')
+app.register_blueprint(message_blueprint)
 
 
 # Registrasi blueprint API
@@ -78,6 +82,7 @@ app.register_blueprint(auth_api_blueprint)
 app.register_blueprint(sentiment_bp, url_prefix='/api/sentiment')
 app.register_blueprint(users_api_blueprint, url_prefix='/api/users')
 app.register_blueprint(articles_api)
+app.register_blueprint(messages_api_blueprint)
 
 from models.user import User
 

@@ -12,5 +12,20 @@ function handleFlashMessages() {
   });
 }
 
+// Fungsi untuk menambahkan flash message secara dinamis
+function addFlashMessage(type, text) {
+  // Buat elemen div baru
+  const flashMessage = document.createElement("div");
+  flashMessage.classList.add("flash-message", `flash-${type}`);
+  flashMessage.innerText = text;
+
+  // Tambahkan elemen ke container utama (atau body)
+  const container = document.getElementById("flash-container") || document.body;
+  container.appendChild(flashMessage);
+
+  // Panggil handler untuk pesan flash baru
+  handleFlashMessages();
+}
+
 // Jalankan fungsi handleFlashMessages saat halaman dimuat
 document.addEventListener("DOMContentLoaded", handleFlashMessages);
