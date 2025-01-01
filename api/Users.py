@@ -3,6 +3,7 @@ from models.user import User
 from models.points import Points
 from utils import get_user_by_id, delete_old_avatar, save_new_avatar
 from app import db
+from datetime import datetime
 
 users_api_blueprint = Blueprint("users_api", __name__, url_prefix="/api/users")
 
@@ -90,7 +91,62 @@ def delete_user(user_id):
         db.session.rollback()  # Rollback transaksi jika terjadi kesalahan
         return jsonify({'success': False, 'message': f'Gagal menghapus user: {str(e)}'}), 500
 
+@users_api_blueprint.route('/update/<int:user_id>', methods=['PUT'])
+def update_user_api(user_id):
+    try:
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"success": False, "message": "User tidak ditemukan"}), 404
 
+        # Ambil data dari JSON request
+        data = request.json
+        nama_user = data.get('nama_user', '').strip()
+        email = data.get('email', '').strip()
+        nomor_hp = data.get('nomor_hp', '').strip()
+        jenis_kelamin = data.get('jenis_kelamin', '').strip()
+        tanggal_lahir = data.get('tanggal_lahir', '').strip()
+
+        # Validasi nama dan email
+        if not nama_user or not email:
+            return jsonify({"success": False, "message": "Nama dan email tidak boleh kosong"}), 400
+
+        # Validasi nomor HP
+        if not nomor_hp.isdigit():
+            return jsonify({"success": False, "message": "Nomor HP harus berupa angka"}), 400
+
+        # Validasi jenis kelamin
+        if jenis_kelamin not in ['Laki-laki', 'Perempuan']:
+            return jsonify({"success": False, "message": "Jenis kelamin tidak valid"}), 400
+
+        # Validasi tanggal lahir
+        try:
+            tanggal_lahir = datetime.strptime(tanggal_lahir, '%Y-%m-%d').date()
+        except ValueError:
+            return jsonify({"success": False, "message": "Tanggal lahir tidak valid"}), 400
+
+        # Perbarui data user
+        user.nama_user = nama_user
+        user.email = email
+        user.nomor_hp = nomor_hp
+        user.jenis_kelamin = jenis_kelamin
+        user.tanggal_lahir = tanggal_lahir
+
+        # Handle Avatar Upload
+        if 'avatar' in request.files and request.files['avatar'].filename != '':
+            file = request.files['avatar']
+            if file:
+                delete_old_avatar(user)
+                user.avatar = save_new_avatar(file)
+            else:
+                return jsonify({"success": False, "message": "Tipe file avatar tidak valid"}), 400
+
+        # Commit perubahan ke database
+        db.session.commit()
+
+        return jsonify({"success": True, "message": "Profil berhasil diperbarui"}), 200
+
+    except Exception as e:
+        return jsonify({"success": False, "message": f"Terjadi kesalahan: {str(e)}"}), 500
 
 @users_api_blueprint.route('/edit-user/<int:user_id>', methods=['PUT'])
 def edit_user_from_table(user_id):
@@ -149,20 +205,4 @@ def edit_user_from_table(user_id):
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500
 
-# @users_api_blueprint.route('/delete-account/<int:user_id>', methods=['DELETE'])
-# def delete_account(user_id):
-#     try:
-#         # Cari user berdasarkan ID
-#         user = User.query.get(user_id)
-#         if not user:
-#             return jsonify({'success': False, 'message': 'User tidak ditemukan.'}), 404
 
-#         # Hapus user dari database
-#         db.session.delete(user)
-#         db.session.commit()
-
-#         return jsonify({'success': True, 'message': 'Akun berhasil dihapus.'}), 200
-#     except Exception as e:
-#         # Log error dan kembalikan response 500
-#         print(f"Error saat menghapus akun: {e}")
-#         return jsonify({'success': False, 'message': 'Terjadi kesalahan pada server.'}), 500
