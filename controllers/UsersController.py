@@ -72,7 +72,7 @@ def update_user(user_id):
 @user_blueprint.route('/reset-avatar', methods=['POST'])
 def reset_avatar():
     try:
-        user = User.query.filter_by(email=session['user']['email']).first()
+        user = user.query.filter_by(email=session['user']['email']).first()
         if not user:
             flash("User tidak ditemukan", "danger")
             return redirect(url_for('admin.settings'))
