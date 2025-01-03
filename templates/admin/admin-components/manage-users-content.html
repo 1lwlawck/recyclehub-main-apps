@@ -1,5 +1,33 @@
 <div class="p-4 sm:ml-64 font-roboto">
   <div class="mt-20">
+    <div class="grid grid-cols-4 gap-6">
+      <div
+        class="bg-white border-4 border-black p-6 rounded-lg shadow-[8px_8px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:scale-105 hover:translate-y-[-4px] transition-transform duration-300 ease-in-out mb-4"
+      >
+        <h2 class="text-xl font-bold text-gray-800">
+          Total User Terverifikasi
+        </h2>
+        <p class="text-3xl font-bold text-black mt-4">
+          {{ jumlah_user_terverifikasi }}
+        </p>
+        <p class="text-gray-500 mt-1">Previous: 12,543</p>
+        <p class="text-green-500 mt-2 font-semibold">Progress: +14.23%</p>
+      </div>
+
+      <div
+        class="bg-white border-4 border-black p-6 rounded-lg shadow-[8px_8px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:scale-105 hover:translate-y-[-4px] transition-transform duration-300 ease-in-out mb-4"
+      >
+        <h2 class="text-xl font-bold text-gray-800">
+          Total User Belum Terverifikasi
+        </h2>
+        <p class="text-3xl font-bold text-black mt-4">
+          {{ jumlah_user_belum_terverifikasi }}
+        </p>
+        <p class="text-gray-500 mt-1">Previous: 12,543</p>
+        <p class="text-green-500 mt-2 font-semibold">Progress: +14.23%</p>
+      </div>
+    </div>
+
     <!-- Form Pencarian -->
     <form class="max-w-md mb-4">
       <label

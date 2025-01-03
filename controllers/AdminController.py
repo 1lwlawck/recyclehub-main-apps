@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, flash, abort, jsonify, session, redirect, url_for
 from utils import login_required, role_required
 from models.user import User, db 
+from models.articles import Article
+from datetime import datetime
 from time import time
 import os
 from app import app
@@ -14,8 +16,15 @@ admin_blueprint = Blueprint('admin', __name__, url_prefix='/admin')
 @role_required(['admin', 'superadmin'])
 def dashboard():
     try:
+        jumlah_user = User.query.count()
+        jumlah_admin = User.query.filter_by(role='admin').count()
+        jumlah_superadmin = User.query.filter_by(role='superadmin').count()
+        jumlah_user_public = User.query.filter_by(role='public').count()
+
+        jumlah_artikel = Article.query.count()
+
         # Tambahkan logika jika diperlukan, misalnya statistik
-        return render_template('admin/dashboard-admin.html' , time=time)
+        return render_template('admin/dashboard-admin.html' ,jumlah_user=jumlah_user, jumlah_admin=jumlah_admin, jumlah_superadmin=jumlah_superadmin, jumlah_user_public=jumlah_user_public, jumlah_artikel=jumlah_artikel, time=time)
         print("Session Avatar:", session['user']['avatar'])
     except Exception as e:
         flash('Terjadi kesalahan saat memuat halaman dashboard.', 'danger')
@@ -75,9 +84,11 @@ def sentiment_analysis():
 @role_required(['superadmin'])
 def manage_user():
     try:
+        jumlah_user_terverifikasi = User.query.filter_by(is_verified=True).count()
+        jumlah_user_belum_terverifikasi = User.query.filter_by(is_verified=False).count()
         # Mengambil semua data user dari database
         users = User.query.all()
-        return render_template('admin/manage-user.html', users=users , time=time)
+        return render_template('admin/manage-user.html', users=users , time=time , jumlah_user_terverifikasi=jumlah_user_terverifikasi , jumlah_user_belum_terverifikasi=jumlah_user_belum_terverifikasi)
     except Exception as e:
         flash('Terjadi kesalahan saat memuat halaman manage user.', 'danger')
         return jsonify({'message': 'Error loading manage user', 'error': str(e)}), 500
