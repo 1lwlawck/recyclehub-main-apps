@@ -4,6 +4,9 @@ from models.points import Points
 from utils import get_user_by_id, delete_old_avatar, save_new_avatar
 from app import db
 from datetime import datetime
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 users_api_blueprint = Blueprint("users_api", __name__, url_prefix="/api/users")
 
@@ -21,6 +24,7 @@ def get_users():
                 'success': True,
                 'user': {
                     'id': user.id,
+                    'avatar': user.avatar,
                     'nama_user': user.nama_user,
                     'email': user.email,
                     'role': user.role,
@@ -49,6 +53,7 @@ def get_users():
         users_list = [
             {
                 "id": user.id,
+                "avatar": user.avatar,
                 "nama_user": user.nama_user,
                 "email": user.email,
                 "role": user.role,
@@ -94,12 +99,16 @@ def delete_user(user_id):
 @users_api_blueprint.route('/update/<int:user_id>', methods=['PUT'])
 def update_user_api(user_id):
     try:
+        logging.info(f"Memulai pembaruan untuk user_id: {user_id}")
         user = User.query.get(user_id)
         if not user:
+            logging.warning(f"User dengan ID {user_id} tidak ditemukan.")
             return jsonify({"success": False, "message": "User tidak ditemukan"}), 404
 
-        # Ambil data dari JSON request
-        data = request.json
+        data = request.form  # Gunakan `request.form` untuk mendukung multipart/form-data
+        logging.info(f"Data diterima: {data}")
+        avatar = request.files.get('avatar')  # Ambil file avatar jika ada
+
         nama_user = data.get('nama_user', '').strip()
         email = data.get('email', '').strip()
         nomor_hp = data.get('nomor_hp', '').strip()
@@ -132,20 +141,21 @@ def update_user_api(user_id):
         user.tanggal_lahir = tanggal_lahir
 
         # Handle Avatar Upload
-        if 'avatar' in request.files and request.files['avatar'].filename != '':
-            file = request.files['avatar']
-            if file:
-                delete_old_avatar(user)
-                user.avatar = save_new_avatar(file)
-            else:
-                return jsonify({"success": False, "message": "Tipe file avatar tidak valid"}), 400
+        if avatar:
+            logging.info(f"Avatar ditemukan: {avatar.filename}")
+            delete_old_avatar(user)
+            user.avatar = save_new_avatar(avatar)
+        else:
+            logging.info("Tidak ada avatar baru yang diunggah.")
 
         # Commit perubahan ke database
         db.session.commit()
+        logging.info(f"Profil user {user_id} berhasil diperbarui.")
 
         return jsonify({"success": True, "message": "Profil berhasil diperbarui"}), 200
 
     except Exception as e:
+        logging.error(f"Kesalahan selama pembaruan: {e}")
         return jsonify({"success": False, "message": f"Terjadi kesalahan: {str(e)}"}), 500
 
 @users_api_blueprint.route('/edit-user/<int:user_id>', methods=['PUT'])

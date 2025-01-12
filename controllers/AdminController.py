@@ -93,6 +93,16 @@ def manage_user():
         flash('Terjadi kesalahan saat memuat halaman manage user.', 'danger')
         return jsonify({'message': 'Error loading manage user', 'error': str(e)}), 500
 
+@admin_blueprint.route('/daftar-alamat')
+@login_required
+@role_required(['superadmin'])
+def daftar_alamat():
+    try:
+        # Tambahkan logika jika diperlukan, misalnya data pesan
+        return render_template('admin/daftar-alamat-admin.html' , time=time)
+    except Exception as e:
+        flash('Terjadi kesalahan saat memuat halaman sentiment.', 'danger')
+        return jsonify({'message': 'Error loading sentiment', 'error': str(e)}), 500
 @admin_blueprint.route('/article-post')
 @login_required
 @role_required(['superadmin'])

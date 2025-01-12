@@ -64,6 +64,8 @@ from api.Users import users_api_blueprint
 from api.Articles import articles_api
 from api.Emails import email_blueprint
 from api.Message import messages_api_blueprint
+from api.Alamat import alamat_api
+
 
 
 # Registrasi blueprint
@@ -85,6 +87,7 @@ app.register_blueprint(sentiment_bp, url_prefix='/api/sentiment')
 app.register_blueprint(users_api_blueprint, url_prefix='/api/users')
 app.register_blueprint(articles_api)
 app.register_blueprint(messages_api_blueprint)
+app.register_blueprint(alamat_api, url_prefix='/api')
 
 from models.user import User
 
